@@ -17,7 +17,7 @@ Create-React-App를 기본으로 한 atomic 디자인패턴 구조의 프로젝�
 CRA 배포파일로 index.html 및 favicon 등의 파일이 존재합니다.
 -> Note that we only recommend to use `public` folder as an escape hatch 주석 발췌
 
-### services
+### api
 
 API 요청에 관한 폴더입니다. axios 라이브러리를 기반으로 합니다.
 
