@@ -1,0 +1,58 @@
+{
+  "name": "cafe-writer",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@headlessui/react": "^1.7.18",
+    "@heroicons/react": "^2.1.1",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.6.2",
+    "firebase": "^10.6.0",
+    "firebase-tools": "^12.9.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-ga": "^3.3.1",
+    "react-hook-form": "^7.48.2",
+    "react-query": "^3.39.3",
+    "react-router-dom": "^6.22.1",
+    "react-script-hook": "^1.7.2",
+    "react-scripts": "5.0.1",
+    "recoil": "^0.7.7",
+    "styled-components": "^6.1.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "deploy": "yarn build; firebase deploy",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
+    "html-to-image": "^1.11.11",
+    "react-error-overlay": "6.0.9",
+    "tailwindcss": "^3.4.1"
+  }
+}
+

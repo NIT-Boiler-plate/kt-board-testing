@@ -1,92 +1,92 @@
-# kt-board-plate
+# React-CRA-Boilerplate-v1
+
+Create-React-App를 기본으로 한 atomic 디자인패턴 구조의 프로젝트 boiler-plate입니다.
+해당 프로젝트를 GitLab에서 import한 뒤 명칭을 변경하여 사용하시면 됩니다.
+기본적인 폴더 구조이며 추가 업데이트 되는 내용도 반영할 예정입니다.
+
+## 사용법
+
+우선 yarn 명령어를 통해 pakage.json에 기록된 라이브러리들을 설치합니다.
+포트 초기 설정은 3000번 포트입니다.
+구동 명령어는 yarn start를 실행시켜 주세요.
+
+## 디렉토리 구조 설명
+
+### pulbic
+
+CRA 배포파일로 index.html 및 favicon 등의 파일이 존재합니다.
+-> Note that we only recommend to use `public` folder as an escape hatch 주석 발췌
+
+### api
+
+API 요청에 관한 폴더입니다. axios 라이브러리를 기반으로 합니다.
+
+### assets
+
+사진이나 폰트등의 정적인 파일들이 존재합니다.
+(파이썬의 resource 폴더 같은 역할)
+
+### components
+
+아래와 같은 3가지 폴더구조가 존재합니다. 기존의 atomic
+
+atoms: Logo, Text, Input, Button 등 더이상 나눌 수 없는 컴포넌트 들 (html의 시멘틱 태그같은 경우)
+blocks: UserForm, Header, Siderbar 등 (어느정도 재사용이 가능한 구조)
+pages: Home, Login 등 페이지 단위 (프로젝트 당 재사용이 힘듦)
+pages
+ ㄴ Home
+  ㄴ index(JS로직), Home(UI 컴포넌트), style(필요 시)
+  ㄴ 필요한 하위 컴포넌트(index, children, style)
+
+각 폴더에는 index.js, [name].js 가 존재합니다.
+예시) index.js(Js 로직이 존재), Home.js(html, css 존재)
+
+참조: https://www.youtube.com/watch?v=exf4enLbVm4&t=218s
+
+### constants
+
+상수값들이 존재합니다. 주로 ENUM으로 사용되는 값들이 존재합니다.
+(다만, color 같은 경우 tailwind의 config 파일에서 사용할 듯)
+
+### hook
+
+커스텀 hook이 존재하는 폴더입니다. 반복되는 로직을 useState, useEffect 등의 조합으로 구현할 것들이 존재합니다.
+참고: https://react.vlpt.us/basic/21-custom-hook.html
+
+### store
+
+클라이언트 전역 상태관리 관련 폴더입니다. redux, recoil 관련 폴더가 존재합니다.
+
+### util
+
+전역적으로 자주 사용하는 함수들이 존재하는 폴더입니다.
+예시) regEmail 처럼 email을 정규표현식으로 검사하는 함수들
+
+## 라이브러리
+
+### 스타일
+
+tailwind: 향상된 부트스트랩 형태로 빠른 생산성 보장과 반응형 UI를 사용하기 위함.
+styled-components: 순수 커스텀 css에 용이 및 네이밍을 통한 명시성 제공
+
+### 상태관리
+
+react-query: 서버 데이터 state 관리 라이브러리
+recoil: 클라이언트 전역 상태관리 라이브러리(redux 대신 recoil 사용)
 
 
+### 기타
 
-## Getting started
+react-hook-form: form 데이터 사용 라이브러리
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## 설정 파일
 
-## Add your files
+### .eslintrc.js
+작성한 코드의 스타일을 검사합니다. waring, error로 표시를 해주지만 코드를 바꾸진 않습니다. airbnb 스타일을 기본으로 합니다.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### .prettierrc
+prettier 설정 파일로 파일 저장시, 지정된 규칙으로 코드를 포맷팅 합니다. 
 
-```
-cd existing_repo
-git remote add origin http://61.75.91.33/west-nit-team/web/kt-board-plate.git
-git branch -M main
-git push -uf origin main
-```
+이 파일들을 통해 일관된 기본적인 코딩스타일을 표준화 합니다.
 
-## Integrate with your tools
-
-- [ ] [Set up project integrations](http://61.75.91.33/west-nit-team/web/kt-board-plate/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
