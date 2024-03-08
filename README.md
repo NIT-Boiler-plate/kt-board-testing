@@ -33,6 +33,10 @@ API 요청에 관한 폴더입니다. axios 라이브러리를 기반으로 합�
 atoms: Logo, Text, Input, Button 등 더이상 나눌 수 없는 컴포넌트 들 (html의 시멘틱 태그같은 경우)
 blocks: UserForm, Header, Siderbar 등 (어느정도 재사용이 가능한 구조)
 pages: Home, Login 등 페이지 단위 (프로젝트 당 재사용이 힘듦)
+pages
+ ㄴ Home
+  ㄴ index(JS로직), Home(UI 컴포넌트), style(필요 시)
+  ㄴ 필요한 하위 컴포넌트(index, children, style)
 
 각 폴더에는 index.js, [name].js 가 존재합니다.
 예시) index.js(Js 로직이 존재), Home.js(html, css 존재)

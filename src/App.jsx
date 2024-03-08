@@ -1,16 +1,21 @@
-import axios from 'axios';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 
-const App = async () => {
-  try {
-    const response = await axios.get('https://map.naver.com/v5/api/bookmark/sync');
-    console.log(response.data);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
+import Login from './components/pages/Login';
+import Home from './components/pages/Home';
+import Map from './components/pages/Map';
+
+const App = () => {
   return (
-    <div className="App">
-      <p>안녕</p>
-    </div>
+    <>
+      <div className="flex flex-col items-center justify-center bg-gray-100 h-full">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/map" element={<Map />} />
+        </Routes>
+      </div>
+    </>
   );
 };
 
