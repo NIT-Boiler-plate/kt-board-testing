@@ -1,4 +1,4 @@
-const Input = ({ className, name, index, value, onChange }) => {
+const Input = ({ className, name, index, value, onChange, readOnly }) => {
   return (
     <div className={`${className}`}>
       <div className="relative mt-0 rounded-md shadow-sm">
@@ -11,7 +11,7 @@ const Input = ({ className, name, index, value, onChange }) => {
             onChange(e, index);
           }}
           // placeholder="0.00"
-          // readOnly
+          readOnly={readOnly}
         />
       </div>
     </div>
