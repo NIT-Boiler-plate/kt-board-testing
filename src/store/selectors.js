@@ -1,10 +1,10 @@
 import { selector } from 'recoil';
-import { formState } from './atoms';
+import { boardState } from './atoms';
 
-export const formDataSelector = selector({
-  key: 'formDataSelector',
+export const boardDataSelector = selector({
+  key: 'boardDataSelector',
   get: ({ get }) => {
-    const form = get(formState);
+    const form = get(boardState);
     return form;
   },
 });
