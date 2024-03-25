@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full bg-white" lang="en">
+<html class="h-full bg-white overflow-auto" lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="./favicon.ico" />
@@ -18,11 +18,11 @@
         gtag('config', ' %REACT_APP_GA_TRACKING_ID%');
       </script>
       <title>KT보드판</title>
-      <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=%REACT_APP_NAVER_CLIENT_ID%"></script>      
+      <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_KAKAO_JAVASCRIPT_API_KEY%&libraries=services"></script>
       
-    <body class="h-full">
+    <body class="h-full overflow-auto">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root" class="h-full"></div>
+    <div id="root" class="h-full overflow-auto"></div>
   </body>
   
 </html>

@@ -1,16 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Login() {
+import Modal from '../../blocks/Modal';
+import { deleteUser, onAuthStateChanged } from 'firebase/auth';
+import { authService } from '../../../firebase';
+
+export default function Login({ loginForm, handleChange, handleSubmit }) {
   const [logoVisible, setLogoVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  let uu = 'no';
 
   useEffect(() => {
-    // 컴포넌트가 마운트되면 로고를 보이도록 설정
     setLogoVisible(true);
   }, []); // 빈 배열을 전달하여 한 번만 실행되도록 함
 
   return (
-    <div className="bg-white w-full">
+    <div className={`bg-white w-full ${modalVisible ? 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80' : ''}`}>
+      {modalVisible && <Modal {...{ modalVisible }} {...{ setModalVisible }} />}
       <div className="relative h-screen isolate px-6 pt-14">
         <div
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -25,20 +31,43 @@ export default function Login() {
           />
         </div>
         <>
-          <div className="flex  flex-col mt-32">
+          <div className="flex flex-col mt-32">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
               <div
                 className={`opacity-0 transform scale-95 transition-opacity duration-1000 ease-in ${
                   logoVisible ? 'opacity-100' : ''
                 }`}
               >
-                <img className="mx-auto h-10 w-auto" src="/images/logo.png" alt="Your Company" />
+                <img className="mx-auto h-10 w-auto" src="/images/logo-no-bg.png" alt="Your Company" />
                 <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                   순회점검을 위한 KT보드판
                 </h2>
               </div>
             </div>
-
+            {/* <button onClick={handleSubmit}>!!!!!!로그인</button>
+            <button
+              onClick={() => {
+                console.log('iiiiiuuu', uu);
+              }}
+            >
+              !!!!!!로그인확인!!!!!!!!!!!
+            </button> */}
+            {/* <button
+              onClick={() => {
+                const user = authService.currentUser;
+                console.log(user, '123');
+                deleteUser(user)
+                  .then(() => {
+                    console.log(user);
+                  })
+                  .catch(error => {
+                    // An error ocurred
+                    // ...
+                  });
+              }}
+            >
+              로그아웃하기
+            </button> */}
             <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
               <form
                 className="space-y-6"
@@ -48,14 +77,12 @@ export default function Login() {
               >
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                    전화번호
+                    이메일
                   </label>
                   <div className="mt-2">
                     <input
-                      // id="email"
-                      // name="email"
-                      // type="email"
-                      // autoComplete="email"
+                      name="email"
+                      onChange={handleChange}
                       required
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
@@ -77,6 +104,7 @@ export default function Login() {
                       name="password"
                       type="password"
                       autoComplete="current-password"
+                      onChange={handleChange}
                       required
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
@@ -84,8 +112,8 @@ export default function Login() {
                 </div>
                 <div className="space-y-2">
                   <Link
+                    onClick={handleSubmit}
                     className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    to="/home"
                   >
                     로그인
                   </Link>
@@ -93,7 +121,12 @@ export default function Login() {
               </form>
               <p className="mt-10 text-center text-sm text-gray-500">
                 최초 로그인 시 상태가 유지됩니다.{' '}
-                <Link className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500" to="/signin">
+                <Link
+                  onClick={() => {
+                    setModalVisible(!modalVisible);
+                  }}
+                  className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                >
                   회원가입 하기
                 </Link>
               </p>
@@ -113,7 +146,6 @@ export default function Login() {
           ></div>
         </div> */}
       </div>
-      {/* <Modal /> */}
     </div>
   );
 }
