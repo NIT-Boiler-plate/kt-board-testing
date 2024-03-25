@@ -20,7 +20,14 @@ const Row = ({ data, index, handleChange, handleSumbit }) => {
 
   return (
     <div class="flex justify-center items-center space-x-2 ">
-      <Input className="w-1/4 m-0" name="title" value={title} index={index} onChange={handleChange} readOnly={true} />
+      <Input
+        className="w-1/4 m-0 text-center"
+        name="title"
+        value={title}
+        index={index}
+        onChange={handleChange}
+        readOnly={true}
+      />
       <Input
         className="w-3/4"
         name="content"
@@ -36,4 +43,4 @@ const Row = ({ data, index, handleChange, handleSumbit }) => {
 
 export default Row;
 
-//https://tailwindui.com/components/application-ui/elements/dropdowns로 구현할 예정
+//https://tailwindui.com/components/application-ui/elements/dropdowns

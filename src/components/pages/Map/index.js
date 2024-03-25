@@ -43,8 +43,15 @@ const Index = () => {
     // 지도를 생성합니다
     let map = new kakao.maps.Map(mapContainer, mapOption);
     let geocoder = new kakao.maps.services.Geocoder();
+    // let marker = new kakao.maps.Marker();
     let marker = new kakao.maps.Marker();
     let infowindow = new kakao.maps.InfoWindow({ zindex: 1 });
+
+    let markers = [];
+    // addMarker(new kakao.maps.LatLng(latitude, longitude));
+    // addMarker(new kakao.maps.LatLng(latitude, longitude));
+
+    // marker.setMap(map);
 
     mapRef.current = map;
     markerRef.current = marker;
@@ -57,7 +64,7 @@ const Index = () => {
           let roadAddr = !!result[0].road_address ? result[0].road_address.address_name : '';
           let nomalAddr = result[0].address.address_name;
 
-          let content = `<div class="w-full text-sm m-2" style="background-color"><span> ${
+          let content = `<div class="w-full text-sky-600 text-sm m-2" style="background-color"><span> ${
             roadAddr ? roadAddr : nomalAddr
           }</span></div>`;
 
@@ -70,10 +77,10 @@ const Index = () => {
           infowindow.open(map, marker);
 
           console.log('mouseEvent 좌표', mouseEvent.latLng.getLng(), mouseEvent.latLng.getLat());
+          console.log('currentGeoData좌표', currentGeoData);
           setGeoData({ latitude: mouseEvent.latLng.getLat(), longitude: mouseEvent.latLng.getLng() });
           setBoardData(
             boardData.map(data => {
-              console.log(data);
               if (data.title === '점검위치') {
                 return { ...data, content: roadAddr ? roadAddr : nomalAddr };
               }
@@ -85,29 +92,43 @@ const Index = () => {
     });
 
     kakao.maps.event.addListener(marker, 'click', function () {
-      console.log('currentGeoData geoData', currentGeoData, geoData);
-      // if (
-      //   !isValidatedDistance(
-      //     currentGeoData.latitude,
-      //     currentGeoData.longitude,
-      //     geoData.latitude,
-      //     geoData.longitude,
-      //     300,
-      //   )
-      // ) {
-      //   alert('300m 이내에서 선택해주세요.');
-      //   return;
-      // }
+      console.log('흠?currentGeoData geoData', currentGeoData, geoData);
+      if (
+        !isValidatedDistance(
+          currentGeoData.latitude,
+          currentGeoData.longitude,
+          geoData.latitude,
+          geoData.longitude,
+          300,
+        )
+      ) {
+        alert('300m 이내에서 선택해주세요.');
+        return;
+      }
 
-      if (window.confirm('지금 선택한 위치로 지정 하시겠습니까?')) {
+      if (window.confirm('지금 선택한 위치로 조정 하시겠습니까?')) {
         navigate('/home');
       } else {
-        alert('취소');
+        // alert('취소');
       }
     });
 
     function searchDetailAddrFromCoords(coords, callback) {
       geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+    }
+
+    function addMarker(position) {
+      // 마커를 생성합니다
+      var marker = new kakao.maps.Marker({
+        position: position,
+      });
+
+      console.log('현재 markers', markers);
+      // 마커가 지도 위에 표시되도록 설정합니다
+      // marker.setMap(map);
+
+      // 생성된 마커를 배열에 추가합니다
+      markers.push(marker);
     }
 
     return () => {};
@@ -120,7 +141,7 @@ const Index = () => {
         let latitude = position.coords.latitude; // 위도
         let longitude = position.coords.longitude; // 경도
 
-        console.log('현재좌표', latitude, longitude);
+        console.log('현재좌표 시작!', latitude, longitude);
         const moveLatLon = new kakao.maps.LatLng(latitude, longitude);
         setCurrentGeoData({ latitude: latitude, longitude: longitude });
         setGeoData({ latitude: latitude, longitude: longitude });

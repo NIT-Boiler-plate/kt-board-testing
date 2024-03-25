@@ -18,7 +18,7 @@ function isValidatedDistance(lat1, lon1, lat2, lon2, threadholds) {
 
   //   return distance;
 
-  console.log(distance);
+  console.log('현재거리', distance);
   if (distance <= threadholds) {
     return true;
   } else {

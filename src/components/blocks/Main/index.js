@@ -78,6 +78,11 @@ const Index = () => {
   };
 
   const handleConfirm = async () => {
+    if (!selectedImage) {
+      alert('사진을 선택해주세요.');
+
+      return;
+    }
     let dataUrl = await toPng(imageRef.current);
     setCompleteImageUrl(dataUrl);
   };
