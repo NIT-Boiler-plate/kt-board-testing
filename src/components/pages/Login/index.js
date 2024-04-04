@@ -12,22 +12,7 @@ const Index = () => {
     password: '',
   };
   const [loginForm, setLoginForm] = useState(LOGIN_FORM);
-  const [userData, setUserData] = useRecoilState(userState);
-
   const navigate = useNavigate();
-
-  useEffect(() => {
-    onAuthStateChanged(authService, user => {
-      if (user) {
-        const uid = user.uid;
-        console.log('지금로그인중???', uid);
-        setUserData({ ...userData, uid: uid });
-        // navigate('/home');
-      } else {
-        console.log('로그인x');
-      }
-    });
-  }, []);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -35,7 +20,6 @@ const Index = () => {
       ...prevState,
       [name]: value,
     }));
-    console.log(loginForm);
   };
 
   const handleSubmit = async e => {
@@ -45,11 +29,9 @@ const Index = () => {
 
     await signInWithEmailAndPassword(authService, email, password)
       .then(userCredential => {
-        // Signed in
-        const user = userCredential.user;
-        console.log('로그인 버튼 클릭', user);
-        // ...
-        navigate('/home');
+        if (userCredential.uid) {
+          navigate('/home');
+        }
       })
       .catch(error => {
         console.log(error);

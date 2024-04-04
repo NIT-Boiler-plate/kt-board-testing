@@ -2,24 +2,18 @@ import { atom } from 'recoil';
 
 const userState = atom({
   key: 'userState',
-  default: { uid: '' },
-});
-
-const geoState = atom({
-  key: 'geoState',
-  default: { latitude: '', longitude: '' },
-});
-
-const boardState = atom({
-  key: 'boardState',
-  default: [
-    { title: '점검국사', content: '' },
-    { title: '점검위치', content: '' },
-    { title: '점검자', content: '' },
-    { title: '점검일', content: '' },
-    { title: '점검사항', content: '' },
-    { title: '관리번호', content: '' },
-  ],
+  default: {
+    uid: '', //firebase 제공 id
+    dockey: '', //uuid로 생성한 임의 아이디
+    name: '',
+    team: '',
+    email: '',
+    // password: '',
+    branchType: '',
+    centerType: '',
+    latestBoardType: '',
+    createAt: '',
+  },
 });
 
 const postState = atom({
@@ -27,13 +21,34 @@ const postState = atom({
   default: {
     constructionName: '',
     constructionType: '',
-    location: '',
+    constructionDescription: '',
+    constructInspector: '',
     addr: '',
     date: '',
-    imageUrl: '',
-    latitude: '',
-    longitude: '',
+    GPSLatitude: '',
+    GPSLongitude: '',
+    attachmentUrl: '',
+    branchType: '',
+    centerType: '',
+    boardType: '',
+    madeBy: '',
+    createAt: '',
   },
 });
 
-export { boardState, userState, geoState, postState };
+const currentPositionState = atom({
+  key: 'currentPositionState',
+  default: { latitude: '', longitude: '' },
+});
+
+const selectPositionState = atom({
+  key: 'selectPositionState',
+  default: { latitude: '', longitude: '' },
+});
+
+const boardState = atom({
+  key: 'boardState',
+  default: [],
+});
+
+export { boardState, userState, currentPositionState, selectPositionState, postState };

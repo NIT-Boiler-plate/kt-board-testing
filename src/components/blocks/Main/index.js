@@ -1,79 +1,82 @@
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { toPng, toBlob } from 'html-to-image';
+import imageCompression from 'browser-image-compression';
+import exifr from 'exifr';
+import { v4 as uuidv4 } from 'uuid';
 
 import Main from './Main';
-import exifr from 'exifr';
-
-import { boardState, geoState, postState } from '../../../store/stateAtoms';
-import { toPng, toBlob } from 'html-to-image';
-import { TelegramIcon, TelegramShareButton } from 'react-share';
+import {
+  CONSTRUCT_NAME_TITLES,
+  DATE_TITLES,
+  DESCRIPTION_TITLES,
+  INSPECTOR_TITLES,
+  INSPECT_NAME_TITLES,
+  LOCATION_TITLES,
+  MANAGE_NUMBER_TITLES,
+  NAME_TITLES,
+  NUMBER_TITLES,
+  POINT_TITLES,
+  RESULT_TITLES,
+} from '../../../constants/home';
+import { boardState, currentPositionState, postState, selectPositionState, userState } from '../../../store/stateAtoms';
+import { doc, setDoc } from 'firebase/firestore';
+import { dbService } from '../../../firebase';
 
 const Index = () => {
   const { kakao } = window;
+  const [selectPositionData, setSelectPositionData] = useRecoilState(selectPositionState);
+  const [currentPositionData, setCurrentPositionData] = useRecoilState(currentPositionState);
+  const [userData, setUserData] = useRecoilState(userState);
   const [boardData, setBoardData] = useRecoilState(boardState);
-  const [geoData, setGeoData] = useRecoilState(geoState);
-  const [selectedImage, setSelectedImage] = useState(null);
-  // const [isMounted, setIsMounted] = useState(false);
-  const [completeImageUrl, setCompleteImageUrl] = useState('');
   const [postData, setPostData] = useRecoilState(postState);
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [completeImageUrl, setCompleteImageUrl] = useState('');
 
   const imageRef = useRef('<div></div>');
   const geocoder = new kakao.maps.services.Geocoder();
 
   useEffect(() => {
-    // try {
-    //   alert(geoData.latitude);
-    // } catch (error) {}
+    if (postData.attachmentUrl) {
+      setSelectedImage(postData.attachmentUrl);
+    }
+    if (selectPositionData.latitude) {
+      let { latitude, longitude } = selectPositionData;
 
-    console.log('Main 렌더링실행');
-    if (postData.imageUrl) {
-      setSelectedImage(postData.imageUrl);
+      async function initSeletedGeolocation() {
+        const seletedAddr = await getDetailAddress(latitude, longitude);
+        setBoardData(
+          boardData.map(data => {
+            if (LOCATION_TITLES.includes(data.title)) {
+              return { ...data, content: '*' + seletedAddr };
+            }
+            return data;
+          }),
+        );
+      }
+
+      initSeletedGeolocation();
     }
   }, []);
 
   const handleShare = async () => {
-    console.log('시작', imageRef.current);
     const newFile = await toBlob(imageRef.current);
-    console.log('newFile', newFile);
-    // const data = {
-    //   files: [
-    //     new File([newFile], 'image.png', {
-    //       type: newFile.type,
-    //     }),
-    //   ],
-    //   // title: 'myImage',
-    //   // text: '왜 안될까.',
-    // };
+
     let files = [
       new File([newFile], 'image.png', {
         type: newFile.type,
       }),
     ];
 
-    const telegramBotUrl = 'https://t.me/share/url?url=' + encodeURIComponent(completeImageUrl);
-
     try {
       await navigator.share({
         title: 'KT 보드판 점검이미지',
-        // text: '',
         files: files,
-        // url: 'https://wormwlrm.github.io',
       });
       console.log('공유 성공');
     } catch (e) {
       console.log('공유 실패');
-      // alert('공유실패');
-    }
-
-    try {
-      // window.open('https://telegram.me/share/url?url=' + completeImageUrl);
-      // await navigator.share(data);
-    } catch (err) {
-      // const text = '내용 입력';
-      // const url = 'https://sample.com/index.php';
-      // alert('에러');
-      // alert(completeImageUrl);
-      // window.open('https://telegram.me/share/url?url=' + completeImageUrl);
     }
   };
 
@@ -83,35 +86,13 @@ const Index = () => {
 
       return;
     }
-    let dataUrl = await toPng(imageRef.current);
-    setCompleteImageUrl(dataUrl);
-  };
-
-  const handleClick = async () => {
-    if (!postData.imageUrl) {
-      return;
-    }
-
     let dataUrl;
     try {
       for (let i = 0; i < 3; i++) {
-        console.log('png실행', i);
         dataUrl = await toPng(imageRef.current);
       }
       setCompleteImageUrl(dataUrl);
     } catch (error) {}
-
-    if (window.confirm('사진을 다운받으시겠습니까?')) {
-    } else {
-      return;
-    }
-
-    const link = document.createElement('a');
-    link.download = 'my-image-name.png';
-    link.href = dataUrl;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   const handleImageChange = async e => {
@@ -119,59 +100,56 @@ const Index = () => {
     const reader = new FileReader();
     let imageAddr = '';
     let imageData = '';
+    let options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
 
     if (!file) {
       return;
     }
 
     try {
+      const compressedFile = await imageCompression(file, options);
       reader.onload = () => {
         setSelectedImage(reader.result);
-        setPostData({ ...postData, imageUrl: reader.result });
+        setPostData({ ...postData, attachmentUrl: reader.result });
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(compressedFile);
 
       let { latitude, longitude } = await exifr.gps(file);
       let { DateTimeOriginal } = await exifr.parse(file);
-      // alert('메타데이터 추출하기', latitude, longitude, DateTimeOriginal);
 
-      // alert(latitude);
-      // alert(longitude);
-      // console.log('사진 위경도', latitude, longitude);
       imageAddr = await getDetailAddress(latitude, longitude);
       imageData = displayDateTimeParts(DateTimeOriginal);
-      // alert(imageAddr);
-      // alert(imageData);
     } catch (error) {
       console.log(error);
-      if (!geoData.latitude) {
+      if (!currentPositionData.latitude) {
         alert(
           '[오류] 사진의 위치정보가 존재하지 않습니다.\n\nㅇ 위치기반 재촬영 방법 \nAndroid : 1. 설정>위치>사용 활성화 \n2. 카메라>좌측 톱니바퀴 아이콘>위치 태그 활성화 \niOS : 설정>카메라>포맷>높은 호환성>재촬영 후 사진 보관함에서 사진 선택',
         );
         return;
       }
 
-      imageAddr = await getDetailAddress(geoData.latitude, geoData.longitude);
+      imageAddr = await getDetailAddress(currentPositionData.latitude, currentPositionData.longitude);
       imageData = displayDateTimeParts(new Date());
     }
 
     setBoardData(
       boardData.map(data => {
-        if (data.title === '점검위치') {
+        if (LOCATION_TITLES.includes(data.title)) {
           return { ...data, content: imageAddr };
         }
-        if (data.title === '점검일') {
+        if (DATE_TITLES.includes(data.title)) {
           return { ...data, content: imageData };
         }
         return data;
       }),
     );
 
-    console.log('랜덜');
     let dataUrl = await toPng(imageRef.current);
     setCompleteImageUrl(dataUrl);
-
-    console.log('이게맞나...');
   };
 
   const displayDateTimeParts = currentDateTime => {
@@ -203,18 +181,72 @@ const Index = () => {
     return _detailArr;
   };
 
+  const handleUpload = async () => {
+    if (!postData.attachmentUrl) {
+      alert('사진을 업로드 해주세요');
+      return;
+    }
+
+    if (window.confirm('현재 내용을 서버에 업로드 하시겠습니까?')) {
+    } else {
+      console.log('취소');
+    }
+
+    const data = {
+      inspectName: '',
+      manageNumber: '',
+      constructionName: '',
+      constructionType: '',
+      constructionDescription: '',
+      constructInspector: userData.name,
+      addr: '',
+      date: '',
+      GPSLatitude: selectPositionData.latitude ? selectPositionData.latitude : currentPositionData.latitude,
+      GPSLongitude: selectPositionData.longitude ? selectPositionData.longitude : currentPositionData.longitude,
+      attachmentUrl: postData.attachmentUrl,
+      branchType: '',
+      centerType: '',
+      boardType: userData.latestBoardType,
+      madeBy: userData.name,
+      uid: userData.uid,
+      createAt: new Date(),
+    };
+
+    boardData.forEach(({ title, content }) => {
+      console.log(title, content);
+
+      if (INSPECT_NAME_TITLES.includes(title)) {
+        data.inspectName = content;
+      } else if (MANAGE_NUMBER_TITLES.includes(title)) {
+        data.manageNumber = content;
+      } else if (CONSTRUCT_NAME_TITLES.includes(title)) {
+        data.constructionName = content;
+      } else if (DESCRIPTION_TITLES.includes(title)) {
+        data.constructionDescription = content;
+      } else if (INSPECTOR_TITLES.includes(title)) {
+        data.constructInspector = content;
+      } else if (LOCATION_TITLES.includes(title)) {
+        data.addr = content;
+      } else if (DATE_TITLES.includes(title)) {
+        data.date = content;
+      }
+    });
+    let docKey = uuidv4();
+    await setDoc(doc(dbService, 'post-collection', docKey), data);
+  };
+
   return (
     <Main
       {...{ boardData }}
       {...{ setBoardData }}
       {...{ handleShare }}
       {...{ handleConfirm }}
+      {...{ handleUpload }}
       {...{ selectedImage }}
       {...{ setSelectedImage }}
       {...{ completeImageUrl }}
       {...{ postData }}
       {...{ setPostData }}
-      {...{ handleClick }}
       {...{ handleImageChange }}
       {...{ imageRef }}
     />
