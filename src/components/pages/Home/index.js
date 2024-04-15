@@ -13,6 +13,7 @@ const Index = () => {
   useEffect(() => {
     onAuthStateChanged(authService, user => {
       if (user) {
+        console.log(user.uid);
         querySnapShot(user.uid);
       }
     });

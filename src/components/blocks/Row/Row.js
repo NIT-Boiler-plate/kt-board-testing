@@ -3,33 +3,19 @@ import ArrowDownCircle from '../../../assets/svg/Arrow-down-circle';
 import MapPin from '../../../assets/svg/Map-pin';
 import Input from '../../atoms/Input';
 import { useState } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { dbService } from '../../../firebase';
-import { useRecoilState } from 'recoil';
-import { userState } from '../../../store/stateAtoms';
 
-const Row = ({ boardItem, index, handleFormChange }) => {
+import { useRecoilState } from 'recoil';
+import { boardState, userState } from '../../../store/stateAtoms';
+
+const Row = ({ arr, boardItem, index, handleFormChange }) => {
   const [userData, setUserData] = useRecoilState(userState);
   const [isOpend, setIsOpend] = useState(false);
+  const [boardData, setBoardData] = useRecoilState(boardState);
+
   const { latestBoardType, name, uid } = userData;
   const { title, content } = boardItem;
 
   const readOnlyList = ['점검위치', '점검장소', '주소', '점검일', '장소', '날짜'];
-
-  async function querySnapShot() {
-    const ref = collection(dbService, 'post-collection');
-
-    const q = query(ref, where('madeBy', '==', name), where('boardType', '==', latestBoardType));
-    const querySnapshot = await getDocs(q);
-    const _userData = querySnapshot.docs.map(doc => ({
-      ...doc.data(), //합쳐서 보여줌
-    }));
-
-    return _userData;
-  }
-
-  const array = querySnapShot();
-  console.log('array', array);
 
   const selectSvg = title => {
     if (title === '점검장소' || title === '주소') {
@@ -62,7 +48,13 @@ const Row = ({ boardItem, index, handleFormChange }) => {
         onChange={handleFormChange}
         readOnly={readOnlyList.includes(title) ? true : false}
       />
-
+      {/* <button
+        onClick={() => {
+          console.log('boardData???', boardData);
+        }}
+      >
+        안녕나는버튼
+      </button> */}
       <>
         <div className="relative cursor-pointer">
           {selectSvg(title)}
@@ -75,7 +67,25 @@ const Row = ({ boardItem, index, handleFormChange }) => {
               tabindex="-1"
             >
               <div class="py-1" role="none">
-                <div className="text-gray-700 block px-4 py-2 text-sm">{}</div>
+                {/* {arr.map((item, i) => (
+                  <div
+                    onClick={e => {
+                      setBoardData(
+                        boardData.map((data, i) => {
+                          console.log('보드데이터', data);
+                          if (index === i) {
+                            return { ...data, content: item };
+                          }
+
+                          return data;
+                        }),
+                      );
+                    }}
+                    className="text-gray-700 block px-4 py-2 text-sm"
+                  >
+                    {item}
+                  </div>
+                ))} */}
               </div>
             </div>
           )}

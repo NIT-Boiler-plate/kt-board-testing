@@ -16,6 +16,7 @@ const App = () => {
   useEffect(() => {
     onAuthStateChanged(authService, user => {
       if (user) {
+        console.log(user);
         navigate('/home');
       }
     });

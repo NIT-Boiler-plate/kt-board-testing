@@ -1,5 +1,5 @@
 import { BOARD_BUTTON_LIST } from '../../../constants/board';
-import Row from '../Row/Row';
+import Row from '../Row/';
 
 const Board = ({ userData, setUserData, latestBoardType, boardData, handleFormChange, handleClick }) => {
   return (

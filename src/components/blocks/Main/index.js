@@ -95,7 +95,9 @@ const Index = () => {
     } catch (error) {}
   };
 
-  const handleImageChange = async e => {
+  const handleImageChange = async (e, inputType) => {
+    console.log('콘솔테스팅');
+
     const file = e.target.files[0];
     const reader = new FileReader();
     let imageAddr = '';
@@ -110,30 +112,49 @@ const Index = () => {
       return;
     }
 
-    try {
-      const compressedFile = await imageCompression(file, options);
-      reader.onload = () => {
-        setSelectedImage(reader.result);
-        setPostData({ ...postData, attachmentUrl: reader.result });
-      };
-      reader.readAsDataURL(compressedFile);
+    const compressedFile = await imageCompression(file, options);
+    reader.onload = () => {
+      setSelectedImage(reader.result);
+      setPostData({ ...postData, attachmentUrl: reader.result });
+    };
+    reader.readAsDataURL(compressedFile);
 
-      let { latitude, longitude } = await exifr.gps(file);
-      let { DateTimeOriginal } = await exifr.parse(file);
-
-      imageAddr = await getDetailAddress(latitude, longitude);
-      imageData = displayDateTimeParts(DateTimeOriginal);
-    } catch (error) {
-      console.log(error);
-      if (!currentPositionData.latitude) {
+    if (inputType === 'camera') {
+      imageAddr = await getDetailAddress(currentPositionData.latitude, currentPositionData.longitude);
+      imageData = displayDateTimeParts(new Date());
+    } else if (inputType === 'photo') {
+      try {
+        let { latitude, longitude } = await exifr.gps(file);
+        let { DateTimeOriginal } = await exifr.parse(file);
+        let gpsInfo = await exifr.gps(file);
+        let daInfo = await exifr.parse(file);
+        //alert('여기야!');
+        //alert(JSON.stringify(gpsInfo));
+        //alert('여기야!22');
+        //alert(JSON.stringify(daInfo));
+        // exifr
+        //   .gps(file)
+        //   .then(gps => {
+        //     // 위도와 경도를 출력합니다.
+        //     alert('위도:', gps.latitude);
+        //     alert('경도:', gps.longitude);
+        //   })
+        //   .catch(error => {
+        //     console.error('오류 발생:', error);
+        //   });
+        //console.log('여기떠야됌', latitude, ' ', longitude);
+        //alert(latitude);
+        //alert(longitude);
+        // alert(DateTimeOriginal);
+        imageAddr = await getDetailAddress(latitude, longitude);
+        imageData = displayDateTimeParts(DateTimeOriginal);
+      } catch (error) {
+        console.log(error);
         alert(
           '[오류] 사진의 위치정보가 존재하지 않습니다.\n\nㅇ 위치기반 재촬영 방법 \nAndroid : 1. 설정>위치>사용 활성화 \n2. 카메라>좌측 톱니바퀴 아이콘>위치 태그 활성화 \niOS : 설정>카메라>포맷>높은 호환성>재촬영 후 사진 보관함에서 사진 선택',
         );
-        return;
+        alert(error);
       }
-
-      imageAddr = await getDetailAddress(currentPositionData.latitude, currentPositionData.longitude);
-      imageData = displayDateTimeParts(new Date());
     }
 
     setBoardData(
@@ -163,6 +184,8 @@ const Index = () => {
   };
 
   // 모바일 IP Local에서 호출실패 -> 도메인 이슈로 예상
+  const seoulLat = 37.480731; // KT구로국사
+  const seoulLon = 126.9033394; // KT구로국사
   const getDetailAddress = async (latitude, longitude) => {
     const _detailArr = await new Promise((resolve, reject) => {
       geocoder.coord2Address(longitude, latitude, (result, status) => {
@@ -187,7 +210,11 @@ const Index = () => {
       return;
     }
 
-    if (window.confirm('현재 내용을 서버에 업로드 하시겠습니까?')) {
+    if (
+      window.confirm(
+        '업로드하시면 지금 현재 작성하신 내용이 다음에도 쓸 수 있도록 저장됩니다. 서버에 업로드 하시겠습니까?',
+      )
+    ) {
     } else {
       console.log('취소');
     }
@@ -203,7 +230,7 @@ const Index = () => {
       date: '',
       GPSLatitude: selectPositionData.latitude ? selectPositionData.latitude : currentPositionData.latitude,
       GPSLongitude: selectPositionData.longitude ? selectPositionData.longitude : currentPositionData.longitude,
-      attachmentUrl: postData.attachmentUrl,
+      // attachmentUrl: postData.attachmentUrl,
       branchType: '',
       centerType: '',
       boardType: userData.latestBoardType,
@@ -213,8 +240,6 @@ const Index = () => {
     };
 
     boardData.forEach(({ title, content }) => {
-      console.log(title, content);
-
       if (INSPECT_NAME_TITLES.includes(title)) {
         data.inspectName = content;
       } else if (MANAGE_NUMBER_TITLES.includes(title)) {

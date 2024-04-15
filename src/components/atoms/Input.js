@@ -10,7 +10,6 @@ const Input = ({ className, name, index, value, onChange, readOnly }) => {
           onChange={e => {
             onChange(e, index);
           }}
-          // placeholder="0.00"
           readOnly={readOnly}
         />
       </div>

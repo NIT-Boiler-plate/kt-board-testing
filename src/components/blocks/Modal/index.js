@@ -25,6 +25,8 @@ const Index = ({ modalVisible, setModalVisible }) => {
   };
 
   const handleSubmit = async () => {
+    const userRef = collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION);
+
     const { name, team, email, password, checkedPassword } = signInForm;
     const emailRegex = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
@@ -54,6 +56,7 @@ const Index = ({ modalVisible, setModalVisible }) => {
       const userRef = collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION);
 
       console.log('_userCredential', _userCredential);
+      console.log(userRef, 'userRef');
       if (_userCredential.user) {
         const _dockey = uuidv4();
         await setDoc(doc(userRef, _dockey), {
