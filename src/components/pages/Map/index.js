@@ -55,6 +55,8 @@ const Index = () => {
           let _lat = mouseEvent.latLng.getLat();
           let _lng = mouseEvent.latLng.getLng();
 
+          console.log('지도에서 선택', positionData, _lat, _lng);
+
           setPositonData({ ...positionData, SELECT: { latitude: _lat, longitude: _lng } });
         }
       });
@@ -65,6 +67,7 @@ const Index = () => {
     }
 
     function setCenter({ latitude, longitude }) {
+      console.log('MAP에서 새로고침', latitude, longitude);
       var moveLatLon = new kakao.maps.LatLng(latitude, longitude);
 
       if (!navigator.geolocation) {
@@ -78,6 +81,8 @@ const Index = () => {
           let _lng = position.coords.longitude; // 경도
 
           const moveLatLon = new kakao.maps.LatLng(_lat, _lng);
+          console.log('_lat', _lat, _lng);
+          console.log({ ...positionData });
           setPositonData({ ...positionData, GPS: { latitude: _lat, longitude: _lng } });
 
           console.log('gps호출map에서', positionData);
@@ -99,6 +104,7 @@ const Index = () => {
   }, []);
 
   const handleConfirm = () => {
+    console.log('버튼눌러서 포지션 값 확인하기', positionData);
     if (!positionData['SELECT'].latitude) {
       alert('위치를 선택해주세요.');
       return;

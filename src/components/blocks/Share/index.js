@@ -12,8 +12,6 @@ const Index = () => {
   const [boardData, setBoardData] = useRecoilState(boardState);
   const { latestBoardType, dockey, name, team } = userData;
 
-  console.log('DD', DAO(latestBoardType));
-
   const handleShare = async () => {
     if (!navigator.canShare()) {
       alert('공유 기능을 사용할 수 없는 환경입니다.\n*안드로이드는 크롬브라우저, 아이폰은 사파리를 사용해주세요.');

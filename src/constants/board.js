@@ -29,7 +29,7 @@ const BOARD_TYPES = {
     { title: '점검장소', content: '' },
     { title: '작업내용', content: '' },
     { title: '점검결과', content: '' },
-    { title: '', content: '' },
+    { title: '비고', content: '' },
   ],
   4: [
     { title: '점검일시', content: '' },

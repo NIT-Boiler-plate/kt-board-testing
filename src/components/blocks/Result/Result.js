@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Result = ({ imageRef, boardData, imageUrl }) => {
+const Result = ({ imageRef, boardData, imageUrl, handleDownload }) => {
   const origianlUrl = imageUrl['ORIGINAL'].url;
   const combinedUrl = imageUrl['COMBINE'].url;
 
@@ -20,7 +20,14 @@ const Result = ({ imageRef, boardData, imageUrl }) => {
         </p>
       </div>
       <div className="relative border-none">
-        {combinedUrl && <img className="absolute z-20" src={combinedUrl} alt="보드판 이미지" />}
+        {combinedUrl && (
+          <img
+            onClick={handleDownload}
+            className="absolute z-20 cursor-pointer"
+            src={combinedUrl}
+            alt="보드판 이미지"
+          />
+        )}
       </div>
       <div ref={imageRef} className={`relative border-none`}>
         {origianlUrl ? (

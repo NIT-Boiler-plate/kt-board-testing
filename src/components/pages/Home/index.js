@@ -5,17 +5,20 @@ import { getAuth, signOut } from 'firebase/auth';
 import { collection, getDocs, query, where, updateDoc, doc } from 'firebase/firestore';
 
 import { authService, dbService } from '../../../firebase';
-import { boardState, userState } from '../../../store/stateAtoms';
+import { boardState, imageUrlState, positionState, userState } from '../../../store/stateAtoms';
 import { onAuthStateChanged } from 'firebase/auth';
 
 import Home from './Home';
 import Loding from '../../atoms/Loding';
 import { BOARD_BUTTON_LIST, BOARD_TYPES } from '../../../constants/board';
+import { getDetailAddress } from '../../../util/position';
+import { LOCATION_TITLES } from '../../../constants/home';
 
 const Index = () => {
   const navigator = useNavigate();
   const imageRef = useRef('<div><div/>');
 
+  const [positonData, setPositonData] = useRecoilState(positionState);
   const [userData, setUserData] = useRecoilState(userState);
   const [boardData, setBoardData] = useRecoilState(boardState);
 
@@ -24,11 +27,9 @@ const Index = () => {
 
   useEffect(() => {
     window.history.pushState(null, '', '');
-    console.log('latestBoardTyp???e', latestBoardType);
 
     onAuthStateChanged(authService, user => {
       if (user) {
-        console.log('홈페이지 접속', user.uid);
         querySnapShot(user.uid);
       }
     });
@@ -42,8 +43,40 @@ const Index = () => {
 
       console.log('_userData 재호출 시점', _userData);
       setUserData(_userData);
-      setBoardData(BOARD_TYPES[_userData.latestBoardType ? _userData.latestBoardType : 1]);
+
+      let isEmpty = true;
+
+      boardData.forEach(board => {
+        if (board.content) {
+          isEmpty = false;
+        }
+      });
+
+      //보드 초기화 명령어
+      if (isEmpty) {
+        // 그냥 넣는게 아니라 여기 넣을 때, 초깃값 넣어줘서 해주기
+        setBoardData(BOARD_TYPES[_userData.latestBoardType ? _userData.latestBoardType : 1]);
+      }
       setSeletedBoard(BOARD_BUTTON_LIST[_userData.latestBoardType ? _userData.latestBoardType - 1 : 0]);
+    }
+
+    // 지도에서 선택한 위치 존재 시 -> 테스팅 필요
+    if (positonData['SELECT'].latitude) {
+      let { latitude, longitude } = positonData['SELECT'];
+
+      async function initSeletedGeolocation() {
+        const seletedAddr = await getDetailAddress(latitude, longitude);
+        setBoardData(
+          boardData.map(data => {
+            if (LOCATION_TITLES.includes(data.title)) {
+              return { ...data, content: '*' + seletedAddr };
+            }
+            return data;
+          }),
+        );
+      }
+
+      initSeletedGeolocation();
     }
   }, []);
 
