@@ -40,7 +40,7 @@ export default function Login({ loginForm, handleChange, handleSubmit }) {
               >
                 <img className="mx-auto h-10 w-auto" src="/images/logo-no-bg.png" alt="Your Company" />
                 <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                  순회점검을 위한 KT보드판 (main)
+                  순회점검을 위한 KT보드판 (main2)
                 </h2>
               </div>
             </div>
