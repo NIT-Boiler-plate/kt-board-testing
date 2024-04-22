@@ -1,36 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Modal from './Modal';
-import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { collection, doc, setDoc } from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
 import { authService, dbService } from '../../../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
 
 const Index = ({ modalVisible, setModalVisible }) => {
-  const SIGN_IN_FORM = {
+  const SIGNIN_FORM = {
+    name: '',
+    team: '',
     email: '',
     password: '',
     checkedPassword: '',
   };
-  const defaultObjectToSend = {
-    name: '',
-    team: '',
-    createdSignAt: '',
-    email: '',
-    postedBoards: [
-      {
-        constructionName: '',
-        constructionType: '',
-        date: '',
-        imageUrl: '',
-        location: '',
-        createdAt: '',
-        kind: '',
-      },
-    ],
-  };
-
-  const [signInForm, setSignInForm] = useState(SIGN_IN_FORM);
-  const navigate = useNavigate();
+  const [signInForm, setSignInForm] = useState(SIGNIN_FORM);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -39,15 +22,15 @@ const Index = ({ modalVisible, setModalVisible }) => {
       ...prevState,
       [name]: value,
     }));
-
-    console.log(signInForm);
   };
 
   const handleSubmit = async () => {
-    const { email, password, checkedPassword } = signInForm;
+    const userRef = collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION);
+
+    const { name, team, email, password, checkedPassword } = signInForm;
     const emailRegex = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
-    if ([email, password, checkedPassword].includes('')) {
+    if ([name, team, email, password, checkedPassword].includes('')) {
       alert('빈칸 없이 입력해주세요.');
       return;
     }
@@ -69,26 +52,31 @@ const Index = ({ modalVisible, setModalVisible }) => {
     }
 
     try {
-      // createUserWithEmailAndPassword(authService, email, password).then(a => {
-      // console.log(a.user);
-      // });
       const _userCredential = await createUserWithEmailAndPassword(authService, email, password);
-      const { uid } = _userCredential.user;
+      const userRef = collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION);
 
-      console.log('회원가입 성공', uid);
-
-      const userRef = collection(dbService, 'kt-board-firestore');
-
-      if (uid) {
-        await setDoc(doc(userRef, uid), {
-          ...defaultObjectToSend,
+      console.log('_userCredential', _userCredential);
+      console.log(userRef, 'userRef');
+      if (_userCredential.user) {
+        const _dockey = uuidv4();
+        await setDoc(doc(userRef, _dockey), {
+          uid: _userCredential.user.uid, //firebase 제공 id
+          dockey: _dockey, //uuid로 생성한 임의 아이디
+          name: name,
+          team: team,
           email: email,
+          branchType: '서부광역본부',
+          centerType: 'ICT기술담당',
+          latestBoardType: 1,
+          createAt: new Date(),
+          // password: password,
         });
-
-        navigate('/home');
+      } else {
+        alert('회원가입에 실패했습니다.');
       }
     } catch (error) {
-      console.log(error);
+      alert('이미 사용중인 이메일입니다.');
+      console.log('회원가입 실패', error);
     }
   };
 

@@ -2,13 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Modal from '../../blocks/Modal';
-import { deleteUser, onAuthStateChanged } from 'firebase/auth';
-import { authService } from '../../../firebase';
 
 export default function Login({ loginForm, handleChange, handleSubmit }) {
   const [logoVisible, setLogoVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  let uu = 'no';
 
   useEffect(() => {
     setLogoVisible(true);
@@ -44,30 +41,7 @@ export default function Login({ loginForm, handleChange, handleSubmit }) {
                 </h2>
               </div>
             </div>
-            {/* <button onClick={handleSubmit}>!!!!!!로그인</button>
-            <button
-              onClick={() => {
-                console.log('iiiiiuuu', uu);
-              }}
-            >
-              !!!!!!로그인확인!!!!!!!!!!!
-            </button> */}
-            {/* <button
-              onClick={() => {
-                const user = authService.currentUser;
-                console.log(user, '123');
-                deleteUser(user)
-                  .then(() => {
-                    console.log(user);
-                  })
-                  .catch(error => {
-                    // An error ocurred
-                    // ...
-                  });
-              }}
-            >
-              로그아웃하기
-            </button> */}
+
             <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
               <form
                 className="space-y-6"
@@ -133,7 +107,7 @@ export default function Login({ loginForm, handleChange, handleSubmit }) {
             </div>
           </div>
         </>
-        {/* <div
+        <div
           className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
           aria-hidden="true"
         >
@@ -144,7 +118,7 @@ export default function Login({ loginForm, handleChange, handleSubmit }) {
                 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
             }}
           ></div>
-        </div> */}
+        </div>
       </div>
     </div>
   );
