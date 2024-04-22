@@ -34,7 +34,7 @@ const Row = ({ data, index, handleChange, handleSumbit }) => {
         value={content}
         index={index}
         onChange={handleChange}
-        readOnly={title === '점검위치' || title === '점검일' ? true : false}
+        readOnly={title === '점검위치' || title === '점검일시' ? true : false}
       />
       <div className="cursor-pointer">{selectSvg(title)}</div>
     </div>
