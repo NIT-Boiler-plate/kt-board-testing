@@ -30,7 +30,7 @@ const Index = ({ modalVisible, setModalVisible }) => {
     const { name, team, email, password, checkedPassword } = signInForm;
     const emailRegex = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
-    if ([email, password, checkedPassword].includes('')) {
+    if ([name, team, email, password, checkedPassword].includes('')) {
       alert('빈칸 없이 입력해주세요.');
       return;
     }

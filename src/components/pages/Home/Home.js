@@ -1,13 +1,15 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Row from '../../blocks/Row';
-import Main from '../../blocks/Main';
+import React, { useState } from 'react';
 import Board from '../../blocks/Board';
-import { getAuth, signOut } from 'firebase/auth';
 
-const Home = ({ userData, setUserData, currentPositionData }) => {
-  const auth = getAuth();
-  const navigator = useNavigate();
+import Dropdown from '../../atoms/Dropdown';
+import Camera from '../../blocks/Camera';
+import Photo from '../../blocks/Photo';
+import Share from '../../blocks/Share';
+import Combine from '../../blocks/Combine';
+import Result from '../../blocks/Result';
+
+const Home = ({ BOARD_BUTTON_LIST, seletedBoard, Logout, imageRef, handleSelect }) => {
+  const [isOpend, setIsOpend] = useState(false);
 
   return (
     <div class="flex flex-col h-screen sm:py-6">
@@ -15,22 +17,48 @@ const Home = ({ userData, setUserData, currentPositionData }) => {
         <div class="mx-auto max-w-md">
           <div className="flex justify-between items-center pb-1.5 text-black">
             <img className="h-7" src="/images/logo.png" alt="kt logo" />
-            <div
-              onClick={() => {
-                signOut(auth).then(() => {
-                  console.log('로그아웃성공');
-                  navigator('/');
-                  // window.location.reload();
-                });
-              }}
-              className="flex font-semibold  text-gray-500 mx-1 hover:text-black"
-            >
-              Logout
+
+            {/* Header 부분 */}
+            <div className="flex justify-center items-center">
+              <div className="flex font-semibold text-gray-500 mx-3 cursor-pointer">
+                <button
+                  onClick={() => {
+                    setIsOpend(!isOpend);
+                  }}
+                  type="button"
+                  class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 text-sky-500 hover:bg-gray-50 "
+                  id="menu-button"
+                  aria-expanded="true"
+                  aria-haspopup="true"
+                >
+                  {seletedBoard.name}
+                  <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <Dropdown itemList={BOARD_BUTTON_LIST} {...{ isOpend }} {...{ setIsOpend }} {...{ handleSelect }} />
+              <div
+                onClick={Logout}
+                className="flex font-semibold text-gray-500 cursor-pointer text-sm hover:text-black"
+              >
+                로그아웃
+              </div>
             </div>
           </div>
           <div class="divide-y divide-gray-300/50">
-            <Board {...{ userData }} {...{ currentPositionData }} />
-            <Main />{' '}
+            <Board />
+            <div id="main-container" className="flex justify-between items-center pt-1 ">
+              <Camera />
+              <Photo />
+              <Share />
+              <Combine {...{ imageRef }} />
+            </div>
+            <Result {...{ imageRef }} />
           </div>
         </div>
       </div>

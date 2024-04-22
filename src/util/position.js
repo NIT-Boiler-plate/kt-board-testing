@@ -40,4 +40,25 @@ const getCurrentPosition = async () => {
   }
 };
 
-export { isValidatedDistance, getCurrentPosition };
+const { kakao } = window;
+const geocoder = new kakao.maps.services.Geocoder();
+
+const getDetailAddress = async (latitude, longitude) => {
+  const _detailArr = await new Promise((resolve, reject) => {
+    geocoder.coord2Address(longitude, latitude, (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        let detailAddr = !!result[0].road_address
+          ? result[0].road_address.address_name
+          : result[0].address.address_name;
+        resolve(detailAddr);
+      } else {
+        console.log('getDetailAddress 불러오기 실패');
+        reject(new Error('Geocoding failed'));
+      }
+    });
+  });
+
+  return _detailArr;
+};
+
+export { isValidatedDistance, getCurrentPosition, getDetailAddress };

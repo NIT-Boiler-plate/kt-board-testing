@@ -1,29 +1,21 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-import { boardState, currentPositionState, selectPositionState } from '../../../store/stateAtoms';
-
 import Map from './Map';
+import { positionState } from '../../../store/stateAtoms';
 import { isValidatedDistance } from '../../../util/position';
 
 const Index = () => {
   const navigate = useNavigate();
 
-  const seoulLat = 37.480731; // KT구로국사
-  const seoulLon = 126.9033394; // KT구로국사
-  const seoulStationLat = 37.470874386368905; // 진영면옥
-  const seoulStationLon = 126.90283155712135; // 진영면옥
-
   const { kakao } = window;
-  const [currentPositionData, setCurrentPositionData] = useRecoilState(currentPositionState);
-  const [selectPositionData, setSelectPositionData] = useRecoilState(selectPositionState);
+  const [positionData, setPositonData] = useRecoilState(positionState);
 
   const mapRef = useRef(null);
 
   useEffect(() => {
-    setSelectPositionData({ latitude: '', longitude: '' });
-    const { latitude, longitude } = currentPositionData;
+    const { latitude, longitude } = positionData['GPS'];
 
     let mapContainer = document.getElementById('map'); // 지도를 표시할 div
     let mapOption = {
@@ -60,8 +52,10 @@ const Index = () => {
           infowindow.setContent(content);
           infowindow.open(map, marker);
 
-          console.log('mouseEvent 좌표', mouseEvent.latLng.getLng(), mouseEvent.latLng.getLat());
-          setSelectPositionData({ latitude: mouseEvent.latLng.getLat(), longitude: mouseEvent.latLng.getLng() });
+          let _lat = mouseEvent.latLng.getLat();
+          let _lng = mouseEvent.latLng.getLng();
+
+          setPositonData({ ...positionData, SELECT: { latitude: _lat, longitude: _lng } });
         }
       });
     });
@@ -81,15 +75,16 @@ const Index = () => {
       if (!latitude) {
         navigator.geolocation.getCurrentPosition(function (position) {
           let _lat = position.coords.latitude; // 위도
-          let _lon = position.coords.longitude; // 경도
+          let _lng = position.coords.longitude; // 경도
 
-          const moveLatLon = new kakao.maps.LatLng(_lat, _lon);
-          setCurrentPositionData({ latitude: _lat, longitude: _lon });
+          const moveLatLon = new kakao.maps.LatLng(_lat, _lng);
+          setPositonData({ ...positionData, GPS: { latitude: _lat, longitude: _lng } });
 
+          console.log('gps호출map에서', positionData);
           map.setCenter(moveLatLon);
 
           let _marker = new kakao.maps.Marker({
-            position: new kakao.maps.LatLng(_lat, _lon),
+            position: new kakao.maps.LatLng(_lat, _lng),
           });
           _marker.setMap(map);
           return;
@@ -104,17 +99,17 @@ const Index = () => {
   }, []);
 
   const handleConfirm = () => {
-    if (!selectPositionData.latitude) {
+    if (!positionData['SELECT'].latitude) {
       alert('위치를 선택해주세요.');
       return;
     }
 
     if (
       !isValidatedDistance(
-        selectPositionData.latitude,
-        selectPositionData.longitude,
-        currentPositionData.latitude,
-        currentPositionData.longitude,
+        positionData['SELECT'].latitude,
+        positionData['SELECT'].longitude,
+        positionData['GPS'].latitude,
+        positionData['GPS'].longitude,
         300,
       )
     ) {

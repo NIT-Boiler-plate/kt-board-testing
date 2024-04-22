@@ -36,14 +36,22 @@ const postState = atom({
   },
 });
 
-const currentPositionState = atom({
-  key: 'currentPositionState',
-  default: { latitude: '', longitude: '' },
+// 이곳은 positionState 에서 gps랑 select로 나누는게 더 좋을 것 같긴한데
+
+const positionState = atom({
+  key: 'positionState',
+  default: {
+    GPS: { latitude: '', longitude: '' },
+    SELECT: { latitude: '', longitude: '' },
+  },
 });
 
-const selectPositionState = atom({
-  key: 'selectPositionState',
-  default: { latitude: '', longitude: '' },
+const imageUrlState = atom({
+  key: 'imageUrlState',
+  default: {
+    ORIGINAL: { url: '' },
+    COMBINE: { url: '' },
+  },
 });
 
 const boardState = atom({
@@ -51,4 +59,4 @@ const boardState = atom({
   default: [],
 });
 
-export { boardState, userState, currentPositionState, selectPositionState, postState };
+export { boardState, userState, positionState, imageUrlState };
