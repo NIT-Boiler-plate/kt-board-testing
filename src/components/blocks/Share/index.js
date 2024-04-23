@@ -13,7 +13,7 @@ const Index = () => {
   const { latestBoardType, dockey, name, team } = userData;
 
   const handleShare = async () => {
-    if (!navigator.canShare()) {
+    if (!navigator.share) {
       alert('공유 기능을 사용할 수 없는 환경입니다.\n*안드로이드는 크롬브라우저, 아이폰은 사파리를 사용해주세요.');
       return;
     }
