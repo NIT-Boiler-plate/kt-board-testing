@@ -22,8 +22,8 @@ const Index = ({ imageRef }) => {
     }
 
     const a = document.createElement('a');
+    a.download = 'download_image.jpg'; // 다운로드할 파일 이름
     a.href = imageUrl['COMBINE'].url;
-    a.download = 'downloaded_image.jpg'; // 다운로드할 파일 이름
     a.click(); // 링크 클릭 유도
   };
 

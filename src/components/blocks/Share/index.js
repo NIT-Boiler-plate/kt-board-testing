@@ -7,7 +7,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { dbService } from '../../../firebase';
 import { DAO } from '../../../util/data';
 
-const Index = () => {
+const Index = ({ imageRef }) => {
   const [userData, setUserData] = useRecoilState(userState);
   const [boardData, setBoardData] = useRecoilState(boardState);
   const [imageUrl, setImageUrl] = useRecoilState(imageUrlState);
@@ -21,6 +21,7 @@ const Index = () => {
 
     if (!imageUrl['ORIGINAL'].url) {
       alert('사진이 없습니다.');
+      return;
     }
 
     if (window.confirm('사진을 공유하시겠습니까?')) {
@@ -28,10 +29,10 @@ const Index = () => {
       console.log('취소');
     }
 
-    const newFile = await toBlob();
+    const newFile = await toBlob(imageRef.currnet);
 
     let files = [
-      new File([newFile], imageUrl['COMBINE'].url, {
+      new File([newFile], 'shared-image.png', {
         type: newFile.type,
       }),
     ];
@@ -40,7 +41,6 @@ const Index = () => {
       await navigator.share({
         title: 'KT 보드판 사진공유',
         files: files,
-        url: imageUrl['COMBINE'].url,
       });
       console.log('공유 성공');
     } catch (e) {

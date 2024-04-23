@@ -57,7 +57,7 @@ const Home = ({ BOARD_BUTTON_LIST, seletedBoard, Logout, imageRef, handleSelect 
               <Camera />
               <Photo />
               {/* <Download /> */}
-              <Share />
+              <Share {...{ imageRef }} />
               <Combine {...{ imageRef }} />
             </div>
             <Result {...{ imageRef }} />
