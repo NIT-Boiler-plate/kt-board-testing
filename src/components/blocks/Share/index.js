@@ -29,7 +29,7 @@ const Index = ({ imageRef }) => {
       console.log('취소');
     }
 
-    const newFile = await toBlob(imageRef.currnet);
+    const newFile = await toBlob(imageRef);
 
     let files = [
       new File([newFile], 'shared-image.png', {
