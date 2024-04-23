@@ -38,8 +38,9 @@ const Index = () => {
 
     try {
       await navigator.share({
-        title: 'KT 보드판 점검이미지',
+        title: 'KT 보드판 사진공유',
         files: files,
+        url: imageUrl['COMBINE'].url,
       });
       console.log('공유 성공');
     } catch (e) {
