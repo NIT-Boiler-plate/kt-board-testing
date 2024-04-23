@@ -31,6 +31,8 @@ const Index = () => {
     onAuthStateChanged(authService, user => {
       if (user) {
         querySnapShot(user.uid);
+      } else {
+        navigator('/');
       }
     });
 

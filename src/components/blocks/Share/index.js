@@ -29,26 +29,31 @@ const Index = ({ imageRef }) => {
       console.log('취소');
     }
 
-    const newFile = await toBlob(imageRef);
+    // const newFile = await toBlob(imageRef);
 
-    let files = [
-      new File([newFile], 'shared-image.png', {
-        type: newFile.type,
-      }),
-    ];
+    // let files = [
+    //   new File([newFile], 'shared-image.png', {
+    //     type: newFile.type,
+    //   }),2
+    // ];
+    const newFile = await toBlob(imageRef.current);
+    const data = {
+      files: [
+        new File([newFile], 'image.png', {
+          type: newFile.type,
+        }),
+      ],
+      title: 'Image',
+      text: 'image',
+    };
 
     try {
-      await navigator.share({
-        title: 'KT 보드판 사진공유',
-        files: files,
-      });
-      console.log('공유 성공');
-    } catch (e) {
-      console.log('공유 실패');
+      await navigator.share(data);
+    } catch (err) {
+      console.error(err);
     }
 
-    const data = {};
-    await setDoc(doc(dbService, 'post-collection', DAO(latestBoardType)), data);
+    // await setDoc(doc(dbService, 'post-collection', DAO(latestBoardType)), data);
   };
 
   return <Share {...{ handleShare }} />;
