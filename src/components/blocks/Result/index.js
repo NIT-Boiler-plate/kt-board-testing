@@ -17,6 +17,10 @@ const Index = ({ imageRef }) => {
       return;
     }
 
+    if (!imageUrl['ORIGINAL'].url) {
+      alert('사진이 없습니다.');
+    }
+
     const a = document.createElement('a');
     a.href = imageUrl['COMBINE'].url;
     a.download = 'downloaded_image.jpg'; // 다운로드할 파일 이름

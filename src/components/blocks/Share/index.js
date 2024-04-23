@@ -19,6 +19,10 @@ const Index = () => {
       return;
     }
 
+    if (!imageUrl['ORIGINAL'].url) {
+      alert('사진이 없습니다.');
+    }
+
     if (window.confirm('사진을 공유하시겠습니까?')) {
     } else {
       console.log('취소');
