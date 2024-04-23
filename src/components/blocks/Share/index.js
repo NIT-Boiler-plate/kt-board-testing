@@ -2,7 +2,7 @@ import React from 'react';
 import Share from './Share';
 import { toBlob } from 'html-to-image';
 import { useRecoilState } from 'recoil';
-import { boardState, userState } from '../../../store/stateAtoms';
+import { boardState, imageUrlState, userState } from '../../../store/stateAtoms';
 import { doc, setDoc } from 'firebase/firestore';
 import { dbService } from '../../../firebase';
 import { DAO } from '../../../util/data';
@@ -10,6 +10,7 @@ import { DAO } from '../../../util/data';
 const Index = () => {
   const [userData, setUserData] = useRecoilState(userState);
   const [boardData, setBoardData] = useRecoilState(boardState);
+  const [imageUrl, setImageUrl] = useRecoilState(imageUrlState);
   const { latestBoardType, dockey, name, team } = userData;
 
   const handleShare = async () => {
@@ -26,7 +27,7 @@ const Index = () => {
     const newFile = await toBlob();
 
     let files = [
-      new File([newFile], 'image.png', {
+      new File([newFile], imageUrl['COMBINE'].url, {
         type: newFile.type,
       }),
     ];
