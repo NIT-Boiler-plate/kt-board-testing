@@ -8,7 +8,7 @@ const Result = ({ imageRef, boardData, imageUrl, handleDownload }) => {
     <div id="result-image" className="border-none">
       <div className="mb-1 border-none" />
       <div className="text-sky-500 flex items-center text-sm border-none hover:text-sky-600">
-        <span className="mr-1 ">사진을 꾹 누르시면 이미지 저장과 공유가 가능해요</span>
+        <span className="mr-1 ">사진을 클릭하시면 이미지 저장이 가능해요</span>
         <p className={`${origianlUrl ? 'animate-bounce' : ''}`}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
             <path

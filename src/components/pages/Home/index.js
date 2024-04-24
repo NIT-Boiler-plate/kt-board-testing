@@ -26,7 +26,6 @@ const Index = () => {
       if (user) {
         querySnapShot(user.uid);
       } else {
-        alert('유저 데이터가 없습니다.');
         navigator('/');
       }
     });
@@ -38,7 +37,6 @@ const Index = () => {
         ...doc.data(), //합쳐서 보여줌
       }))[0];
 
-      console.log('HOME _userData 재호출 시점', _userData);
       setUserData(_userData);
       setSeletedBoard(BOARD_BUTTON_LIST[_userData.latestBoardType ? _userData.latestBoardType - 1 : 0]);
     }

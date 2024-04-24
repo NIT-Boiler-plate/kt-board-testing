@@ -22,6 +22,12 @@ const Index = ({ imageRef }) => {
       return;
     }
 
+    if (window.confirm('이미지를 저장하시겠습니까?')) {
+    } else {
+      console.log('취소');
+      return;
+    }
+
     const a = document.createElement('a');
     a.download = 'download_image.jpg'; // 다운로드할 파일 이름
     a.href = imageUrl['COMBINE'].url;

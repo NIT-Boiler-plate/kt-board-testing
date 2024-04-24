@@ -1,6 +1,6 @@
 const Dropdown = ({ itemList, isOpend, setIsOpend, handleSelect, index = null }) => {
   return (
-    <div id="drop-down" className="relative ">
+    <div id="drop-down" className="relative z-30">
       {isOpend && (
         <div
           class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"

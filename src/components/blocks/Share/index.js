@@ -44,7 +44,7 @@ const Index = ({ imageRef }) => {
       return;
     }
 
-    if (window.confirm('사진을 공유하시겠습니까? 공유하신 사진 데이터는 서버에도 저장됩니다.')) {
+    if (window.confirm('사진을 공유하시겠습니까?')) {
     } else {
       console.log('취소');
       return;
@@ -57,7 +57,6 @@ const Index = ({ imageRef }) => {
           type: newFile.type,
         }),
       ],
-      title: 'KT 보드판 이미지 공유',
     };
 
     try {

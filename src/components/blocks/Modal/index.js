@@ -51,6 +51,10 @@ const Index = ({ modalVisible, setModalVisible }) => {
 
     try {
       const _userCredential = await createUserWithEmailAndPassword(authService, email, password);
+      if (!_userCredential) {
+        alert('이미 사용중인 이메일입니다.');
+        return;
+      }
       const userRef = collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION);
 
       if (_userCredential.user) {
@@ -71,7 +75,6 @@ const Index = ({ modalVisible, setModalVisible }) => {
         alert('오류가 발생했습니다.');
       }
     } catch (error) {
-      alert('이미 사용중인 이메일입니다.');
       console.log('회원가입 실패', error);
     }
   };

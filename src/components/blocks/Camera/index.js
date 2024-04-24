@@ -14,8 +14,6 @@ const Index = () => {
   const [imageUrl, setImageUrl] = useRecoilState(imageUrlState);
 
   const handleImageCameraChange = async e => {
-    console.log('사진촬영');
-
     const file = e.target.files[0];
     const reader = new FileReader();
 

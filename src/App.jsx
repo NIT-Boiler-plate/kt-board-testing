@@ -19,7 +19,6 @@ const App = () => {
   useEffect(() => {
     onAuthStateChanged(authService, user => {
       if (user) {
-        console.log('로그인 페이지 접속', user.uid);
         querySnapShot(user.uid);
       }
     });
@@ -31,7 +30,6 @@ const App = () => {
         ...doc.data(), //합쳐서 보여줌
       }))[0];
 
-      console.log('_userData 재호출 시점', _userData);
       setUserData(_userData);
 
       //DB에 유저 정보가 있어야 홈페이지로 이동

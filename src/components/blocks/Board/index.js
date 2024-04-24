@@ -84,7 +84,7 @@ const Index = () => {
       // const newGroupedData = Array.from({ length: originalData[0].length }, () => []);
 
       const newGroupedData = [[], [], [], [], [], []];
-      console.log('originalData', originalData);
+      // console.log('originalData', originalData);
       // 각 배열을 순회하며 데이터를 그룹화
       originalData.forEach(array => {
         array.forEach((item, index) => {
