@@ -3,9 +3,9 @@
 const DAO = number => {
   switch (number) {
     case 1:
-      return 'OPS_SAFECHECK';
+      return 'OSP_SAFECHECK';
     case 2:
-      return 'OPS_PATROL';
+      return 'OSP_PATROL';
     case 3:
       return 'SRT';
     case 4:
@@ -19,9 +19,9 @@ const DAO = number => {
 
 const DTO = string => {
   switch (string) {
-    case 'OPS_SAFECHECK':
+    case 'OSP_SAFECHECK':
       return 1;
-    case 'OPS_PATROL':
+    case 'OSP_PATROL':
       return 2;
     case 'SRT':
       return 3;

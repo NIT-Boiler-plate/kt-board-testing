@@ -25,8 +25,6 @@ const Index = ({ modalVisible, setModalVisible }) => {
   };
 
   const handleSubmit = async () => {
-    const userRef = collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION);
-
     const { name, team, email, password, checkedPassword } = signInForm;
     const emailRegex = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
@@ -55,8 +53,6 @@ const Index = ({ modalVisible, setModalVisible }) => {
       const _userCredential = await createUserWithEmailAndPassword(authService, email, password);
       const userRef = collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION);
 
-      console.log('_userCredential', _userCredential);
-      console.log(userRef, 'userRef');
       if (_userCredential.user) {
         const _dockey = uuidv4();
         await setDoc(doc(userRef, _dockey), {
@@ -72,7 +68,7 @@ const Index = ({ modalVisible, setModalVisible }) => {
           // password: password,
         });
       } else {
-        alert('회원가입에 실패했습니다.');
+        alert('오류가 발생했습니다.');
       }
     } catch (error) {
       alert('이미 사용중인 이메일입니다.');

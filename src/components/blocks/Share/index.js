@@ -2,18 +2,38 @@ import React from 'react';
 import Share from './Share';
 import { toBlob } from 'html-to-image';
 import { useRecoilState } from 'recoil';
-import { boardState, imageUrlState, userState } from '../../../store/stateAtoms';
-import { doc, setDoc } from 'firebase/firestore';
+import { boardState, imageUrlState, positionState, userState } from '../../../store/stateAtoms';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import { dbService } from '../../../firebase';
 import { DAO } from '../../../util/data';
 
 const Index = ({ imageRef }) => {
   const [userData, setUserData] = useRecoilState(userState);
   const [boardData, setBoardData] = useRecoilState(boardState);
+  const [positionData, setPositionData] = useRecoilState(positionState);
   const [imageUrl, setImageUrl] = useRecoilState(imageUrlState);
-  const { latestBoardType, dockey, name, team } = userData;
+  const { branchType, centerType, latestBoardType, email, dockey, name, team, uid } = userData;
+
+  const postForm = {
+    GPSLatitude: positionData['SELECT'].latitude ? positionData['SELECT'].latitude : positionData['GPS'].latitude,
+    GPSLongitude: positionData['SELECT'].longitude ? positionData['SELECT'].longitude : positionData['GPS'].longitude,
+    branchType: branchType,
+    centerType: centerType,
+    boardType: DAO(latestBoardType),
+    email: email,
+    dockey: dockey,
+    madeBy: name,
+    team: team,
+    uid: uid,
+    createAt: new Date(),
+    postItems: [],
+  };
 
   const handleShare = async () => {
+    // board를 DB에 넣기 알맞은 형태로 바꿔줘야함.
+
+    // await setDoc(doc(dbService, 'board-collection', dockey), _postData);
+
     if (!navigator.share) {
       alert('공유 기능을 사용할 수 없는 환경입니다.\n*안드로이드는 크롬브라우저, 아이폰은 사파리를 사용해주세요.');
       return;
@@ -24,18 +44,12 @@ const Index = ({ imageRef }) => {
       return;
     }
 
-    if (window.confirm('사진을 공유하시겠습니까?')) {
+    if (window.confirm('사진을 공유하시겠습니까? 공유하신 사진 데이터는 서버에도 저장됩니다.')) {
     } else {
       console.log('취소');
+      return;
     }
 
-    // const newFile = await toBlob(imageRef);
-
-    // let files = [
-    //   new File([newFile], 'shared-image.png', {
-    //     type: newFile.type,
-    //   }),2
-    // ];
     const newFile = await toBlob(imageRef.current);
     const data = {
       files: [
@@ -43,60 +57,23 @@ const Index = ({ imageRef }) => {
           type: newFile.type,
         }),
       ],
-      title: 'Image',
-      text: 'image',
+      title: 'KT 보드판 이미지 공유',
     };
 
     try {
       await navigator.share(data);
+
+      const _postData = { ...postForm, postItems: [...boardData] };
+      console.log(_postData);
+      const docRef = await addDoc(collection(dbService, 'board-collection'), _postData);
+
+      alert('공유가 완료됐습니다.');
     } catch (err) {
       console.error(err);
     }
-
-    // await setDoc(doc(dbService, 'post-collection', DAO(latestBoardType)), data);
   };
 
   return <Share {...{ handleShare }} />;
 };
 
 export default Index;
-
-// const data = {
-//   inspectName: '',
-//   manageNumber: '',
-//   constructionName: '',
-//   constructionType: '',
-//   constructionDescription: '',
-//   constructInspector: userData.name,
-//   addr: '',
-//   date: '',
-//   GPSLatitude: selectPositionData.latitude ? selectPositionData.latitude : currentPositionData.latitude,
-//   GPSLongitude: selectPositionData.longitude ? selectPositionData.longitude : currentPositionData.longitude,
-//   // attachmentUrl: postData.attachmentUrl,
-//   branchType: '',
-//   centerType: '',
-//   boardType: userData.latestBoardType,
-//   madeBy: userData.name,
-//   uid: userData.uid,
-//   createAt: new Date(),
-// };
-
-// boardData.forEach(({ title, content }) => {
-//   if (INSPECT_NAME_TITLES.includes(title)) {
-//     data.inspectName = content;
-//   } else if (MANAGE_NUMBER_TITLES.includes(title)) {
-//     data.manageNumber = content;
-//   } else if (CONSTRUCT_NAME_TITLES.includes(title)) {
-//     data.constructionName = content;
-//   } else if (DESCRIPTION_TITLES.includes(title)) {
-//     data.constructionDescription = content;
-//   } else if (INSPECTOR_TITLES.includes(title)) {
-//     data.constructInspector = content;
-//   } else if (LOCATION_TITLES.includes(title)) {
-//     data.addr = content;
-//   } else if (DATE_TITLES.includes(title)) {
-//     data.date = content;
-//   }
-// });
-// let docKey = uuidv4();
-// await setDoc(doc(dbService, 'post-collection', docKey), data);

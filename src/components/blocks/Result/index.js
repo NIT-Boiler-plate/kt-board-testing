@@ -14,11 +14,12 @@ const Index = ({ imageRef }) => {
 
     // 아이폰은 꾹 눌러서 다운로드 받게하기
     if (isIOS) {
+      alert('아이폰은 사진을 꾹 눌러서 이미지를 저장해주세요.');
       return;
     }
 
     if (!imageUrl['ORIGINAL'].url) {
-      alert('사진이 없습니다.');
+      return;
     }
 
     const a = document.createElement('a');

@@ -9,7 +9,7 @@ import Combine from '../../blocks/Combine';
 import Result from '../../blocks/Result';
 import Download from '../../blocks/Download';
 
-const Home = ({ BOARD_BUTTON_LIST, seletedBoard, Logout, imageRef, handleSelect }) => {
+const Home = ({ BOARD_BUTTON_LIST, seletedBoard, handleLogout, imageRef, handleSelect }) => {
   const [isOpend, setIsOpend] = useState(false);
 
   return (
@@ -32,7 +32,7 @@ const Home = ({ BOARD_BUTTON_LIST, seletedBoard, Logout, imageRef, handleSelect 
                   aria-expanded="true"
                   aria-haspopup="true"
                 >
-                  {seletedBoard.name}
+                  {seletedBoard.title}
                   <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path
                       fill-rule="evenodd"
@@ -44,7 +44,7 @@ const Home = ({ BOARD_BUTTON_LIST, seletedBoard, Logout, imageRef, handleSelect 
               </div>
               <Dropdown itemList={BOARD_BUTTON_LIST} {...{ isOpend }} {...{ setIsOpend }} {...{ handleSelect }} />
               <div
-                onClick={Logout}
+                onClick={handleLogout}
                 className="flex font-semibold text-gray-500 cursor-pointer text-sm hover:text-black"
               >
                 로그아웃

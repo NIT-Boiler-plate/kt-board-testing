@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Input from '../../atoms/Input';
@@ -6,25 +5,46 @@ import Dropdown from '../../atoms/Dropdown';
 
 import ArrowDownCircle from '../../../assets/svg/Arrow-down-circle';
 import MapPin from '../../../assets/svg/Map-pin';
+import { READ_ONLY_CONTENT_LIST, READ_ONLY_TITLE_LIST, MAP_SHOW_LIST } from '../../../constants/board';
+import MinusCircle from '../../../assets/svg/Minus-circle';
 
-const Board = ({ selectedIndex, setSelectedIndex, boardData, handleFormChange }) => {
-  const readOnlyListTitle = [
-    '점검명',
-    '관리번호',
-    '주소',
-    '지점',
-    '날짜',
-    '점검자',
-    '공사장명',
-    '점검일시',
-    '점검자',
-    '점검장소',
-    '작업내용',
-    '점검결과',
-    '점검위치',
-    '점검사항',
-  ];
-  const readOnlyList = ['점검위치', '점검장소', '주소', '점검일시', '장소', '날짜', '점검일'];
+const Board = ({ arr, selectedIndex, setSelectedIndex, boardData, handleFormChange, handleSelect }) => {
+  const getMatchedSVG = (title, index) => {
+    const itemList = arr[index];
+
+    if (MAP_SHOW_LIST.includes(title)) {
+      return (
+        <Link to="/map">
+          <MapPin className="hover:animate-bounce" />
+        </Link>
+      );
+    } else if (READ_ONLY_CONTENT_LIST.includes(title)) {
+      return <MinusCircle class="cursor-not-allowed" />;
+    } else {
+      return (
+        <div
+          className="relative cursor-pointer"
+          onClick={() => {
+            // 동일한 버튼 클릭시 닫기
+            if (selectedIndex === index) {
+              setSelectedIndex(null);
+            } else {
+              setSelectedIndex(index);
+            }
+          }}
+        >
+          <ArrowDownCircle />
+          <Dropdown
+            itemList={itemList}
+            isOpend={selectedIndex === index}
+            setIsOpend={setSelectedIndex}
+            index={index}
+            handleSelect={handleSelect}
+          />
+        </div>
+      );
+    }
+  };
 
   return (
     <div class="space-y-1 text-base leading-5 text-gray-600">
@@ -36,7 +56,7 @@ const Board = ({ selectedIndex, setSelectedIndex, boardData, handleFormChange })
             value={title}
             index={index}
             onChange={handleFormChange}
-            readOnly={readOnlyListTitle.includes(title) ? true : false}
+            readOnly={READ_ONLY_TITLE_LIST.includes(title) ? true : false}
           />
           <Input
             className="w-3/4"
@@ -44,29 +64,9 @@ const Board = ({ selectedIndex, setSelectedIndex, boardData, handleFormChange })
             value={content}
             index={index}
             onChange={handleFormChange}
-            readOnly={readOnlyList.includes(title) ? true : false}
+            readOnly={READ_ONLY_CONTENT_LIST.includes(title) ? true : false}
           />
-          <div className="relative cursor-pointer">
-            {title === '점검장소' || title === '주소' ? (
-              <Link to="/map">
-                <MapPin className="hover:animate-bounce" />
-              </Link>
-            ) : (
-              <div
-                onClick={() => {
-                  // 동일한 버튼 클릭시 닫기
-                  if (selectedIndex === index) {
-                    setSelectedIndex(null);
-                  } else {
-                    setSelectedIndex(index);
-                  }
-                }}
-              >
-                <ArrowDownCircle />
-                <Dropdown isOpend={selectedIndex === index} />
-              </div>
-            )}
-          </div>
+          <div id="emo-button">{getMatchedSVG(title, index)}</div>
         </div>
       ))}
       <ul class="space-y-2"></ul>
@@ -76,3 +76,5 @@ const Board = ({ selectedIndex, setSelectedIndex, boardData, handleFormChange })
 };
 
 export default Board;
+
+// {READ_ONLY_CONTENT_LIST.includes(title) ? <MinusCircle /> : }

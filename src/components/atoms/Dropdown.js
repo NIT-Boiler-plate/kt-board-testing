@@ -1,4 +1,4 @@
-const Dropdown = ({ itemList, isOpend, setIsOpend, handleSelect }) => {
+const Dropdown = ({ itemList, isOpend, setIsOpend, handleSelect, index = null }) => {
   return (
     <div id="drop-down" className="relative ">
       {isOpend && (
@@ -10,15 +10,15 @@ const Dropdown = ({ itemList, isOpend, setIsOpend, handleSelect }) => {
           tabindex="-1"
         >
           <div class="py-1" role="none">
-            {itemList?.map(item => (
+            {itemList?.map(({ title, content }) => (
               <div
                 onClick={() => {
                   setIsOpend(false);
-                  handleSelect(item.type);
+                  handleSelect(index, content);
                 }}
                 className="text-gray-700 block px-4 py-2 text-sm cursor-pointer"
               >
-                {item.name}
+                {!(index === null) ? content : title}
               </div>
             ))}
           </div>
