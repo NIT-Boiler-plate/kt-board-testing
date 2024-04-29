@@ -1,55 +1,82 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import { getAuth, signOut } from 'firebase/auth';
+import { collection, getDocs, query, where, updateDoc, doc } from 'firebase/firestore';
+
+import { authService, dbService } from '../../../firebase';
+import { boardState, userState } from '../../../store/stateAtoms';
+import { onAuthStateChanged } from 'firebase/auth';
 
 import Home from './Home';
-import { userState, boardState, geoState } from '../../../store/stateAtoms';
-import { onAuthStateChanged } from 'firebase/auth';
-import { authService } from '../../../firebase';
+import Loding from '../../atoms/Loding';
+import { BOARD_BUTTON_LIST } from '../../../constants/board';
 
 const Index = () => {
-  const [boardData, setBoardData] = useRecoilState(boardState);
+  const navigator = useNavigate();
+  const imageRef = useRef('<div><div/>');
+
   const [userData, setUserData] = useRecoilState(userState);
-  const [geoData, setGeoData] = useRecoilState(geoState);
+  const [seletedBoard, setSeletedBoard] = useState(BOARD_BUTTON_LIST[0]);
 
   useEffect(() => {
-    console.log('user', userData);
-    // alert('나 홈이야');
-
+    //뒤로 가기 방지
+    window.history.pushState(null, '', '');
     onAuthStateChanged(authService, user => {
       if (user) {
-        const _uid = user.uid;
-        console.log('홈페이지아이디', _uid);
-        setUserData({ ...userData, uid: _uid });
+        querySnapShot(user.uid);
       } else {
-        console.log('로그인x');
+        navigator('/');
       }
     });
+
+    async function querySnapShot(uid) {
+      const q = query(collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION), where('uid', '==', uid));
+      const querySnapshot = await getDocs(q);
+      const _userData = querySnapshot.docs.map(doc => ({
+        ...doc.data(), //합쳐서 보여줌
+      }))[0];
+
+      setUserData(_userData);
+      setSeletedBoard(BOARD_BUTTON_LIST[_userData.latestBoardType ? _userData.latestBoardType - 1 : 0]);
+    }
   }, []);
 
-  const handleFormChange = (e, index) => {
-    const { name, value } = e.target;
-    setBoardData(prevState => {
-      return prevState.map((state, i) => {
-        if (i === index) {
-          return {
-            ...state,
-            [name]: value,
-          };
-        }
-        return state;
-      });
+  // 선택한 드랍다운에서 item의 name과 type을 저장
+  // item은 그냥 보여주기만 할거니깐 상관없고, type은 setUserData에 넣어줘야함.
+  const handleSelect = async (index = 0, value) => {
+    const collectionRef = doc(dbService, process.env.REACT_APP_FIREBASE_COLLECTION, userData.dockey);
+    await updateDoc(collectionRef, { latestBoardType: value });
+
+    setUserData({ ...userData, latestBoardType: value });
+    BOARD_BUTTON_LIST.forEach((item, i) => {
+      if (item.content === value) {
+        setSeletedBoard(BOARD_BUTTON_LIST[i]);
+      }
     });
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    // 폼 데이터 전송 또는 다른 작업 수행
-    console.log(boardData);
+  const handleLogout = () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      navigator('/');
+    });
   };
 
   return (
     <>
-      <Home {...{ boardData }} {...{ handleFormChange }} {...{ handleSubmit }} />
+      {userData.name ? (
+        <Home
+          {...{ BOARD_BUTTON_LIST }}
+          {...{ imageRef }}
+          {...{ userData }}
+          {...{ seletedBoard }}
+          {...{ handleLogout }}
+          {...{ handleSelect }}
+        />
+      ) : (
+        <Loding />
+      )}
     </>
   );
 };

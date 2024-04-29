@@ -1,7 +1,21 @@
-const FORM_DATA = [
-  { title: '공사명', content: '' },
-  { title: '공종', content: '' },
-  { title: '위치', content: '' },
-  { title: '날짜', content: '' },
-  { title: '일자', content: '' },
-];
+const MANAGE_NUMBER_TITLES = ['관리번호'];
+const INSPECT_NAME_TITLES = ['점검명'];
+const CONSTRUCT_NAME_TITLES = ['공사장명'];
+const POINT_TITLES = ['지점'];
+const INSPECTOR_TITLES = ['점검자'];
+const LOCATION_TITLES = ['점검위치', '점검장소', '주소'];
+const DATE_TITLES = ['점검일시', '날짜'];
+const DESCRIPTION_TITLES = ['작업내용'];
+const RESULT_TITLES = ['점검결과'];
+
+export {
+  INSPECT_NAME_TITLES,
+  MANAGE_NUMBER_TITLES,
+  CONSTRUCT_NAME_TITLES,
+  POINT_TITLES,
+  INSPECTOR_TITLES,
+  LOCATION_TITLES,
+  DATE_TITLES,
+  DESCRIPTION_TITLES,
+  RESULT_TITLES,
+};

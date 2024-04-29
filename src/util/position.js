@@ -1,9 +1,4 @@
-const seoulLat = 37.5665; // Latitude of Seoul, South Korea
-const seoulLon = 126.978; // Longitude of Seoul, South Korea
-const seoulStationLat = 37.5536; // Latitude of Seoul Station
-const seoulStationLon = 126.9698; // Longitude of Seoul Station
-
-function isValidatedDistance(lat1, lon1, lat2, lon2, threadholds) {
+const isValidatedDistance = (lat1, lon1, lat2, lon2, threadholds) => {
   // Haversine formula
   const R = 6371e3; // Earth radius in meters
   const φ1 = (lat1 * Math.PI) / 180; // Latitude 1 in radians
@@ -16,20 +11,54 @@ function isValidatedDistance(lat1, lon1, lat2, lon2, threadholds) {
 
   const distance = R * c; // Distance in meters
 
-  //   return distance;
-
   console.log('현재거리', distance);
   if (distance <= threadholds) {
     return true;
   } else {
     return false;
   }
-}
+};
 
-// Example usage:
-// const distance = isValidatedDistance(seoulLat, seoulLon, seoulStationLat, seoulStationLon); // Distance between Seoul and Seoul Station
-// console.log('Distance:', distance, 'meters');
+const getCurrentPosition = async () => {
+  if (navigator) {
+    const position = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+          resolve({ latitude, longitude });
+        },
+        error => {
+          reject(error);
+        },
+      );
+    });
 
-// Check if the distance is less than or equal to 300 meters
+    return position;
+  } else {
+    console.log('no navigator');
+  }
+};
 
-export { isValidatedDistance };
+const { kakao } = window;
+const geocoder = new kakao.maps.services.Geocoder();
+
+const getDetailAddress = async (latitude, longitude) => {
+  const _detailArr = await new Promise((resolve, reject) => {
+    geocoder.coord2Address(longitude, latitude, (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        let detailAddr = !!result[0].road_address
+          ? result[0].road_address.address_name
+          : result[0].address.address_name;
+        resolve(detailAddr);
+      } else {
+        console.log('getDetailAddress 불러오기 실패');
+        reject(new Error('Geocoding failed'));
+      }
+    });
+  });
+
+  return _detailArr;
+};
+
+export { isValidatedDistance, getCurrentPosition, getDetailAddress };
