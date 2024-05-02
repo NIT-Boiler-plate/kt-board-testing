@@ -62,7 +62,7 @@ const Board = ({
           <Input
             className="w-1/4 m-0 text-center"
             name="title"
-            value={DAO(latestBoardType) === 'FREE_FORMAT' && index === 0 ? '*' + title.replace(/^\*+/g, '') : title}
+            value={title}
             index={index}
             onChange={handleFormChange}
             readOnly={DAO(latestBoardType) !== 'FREE_FORMAT' && READ_ONLY_TITLE_LIST.includes(title) ? true : false}
@@ -70,7 +70,7 @@ const Board = ({
           <Input
             className="w-3/4"
             name="content"
-            value={content}
+            value={DAO(latestBoardType) === 'FREE_FORMAT' && index !== 5 ? '*' + content.replace(/^\*+/g, '') : content}
             index={index}
             onChange={handleFormChange}
             readOnly={DAO(latestBoardType) !== 'FREE_FORMAT' && READ_ONLY_CONTENT_LIST.includes(title) ? true : false}
