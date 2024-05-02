@@ -7,7 +7,6 @@ import Photo from '../../blocks/Photo';
 import Share from '../../blocks/Share';
 import Combine from '../../blocks/Combine';
 import Result from '../../blocks/Result';
-import Download from '../../blocks/Download';
 
 const Home = ({ BOARD_BUTTON_LIST, seletedBoard, handleLogout, imageRef, handleSelect }) => {
   const [isOpend, setIsOpend] = useState(false);
@@ -56,7 +55,6 @@ const Home = ({ BOARD_BUTTON_LIST, seletedBoard, handleLogout, imageRef, handleS
             <div id="main-container" className="flex justify-between items-center pt-1 ">
               <Camera />
               <Photo />
-              {/* <Download /> */}
               <Share {...{ imageRef }} />
               <Combine {...{ imageRef }} />
             </div>

@@ -7,18 +7,27 @@ import ArrowDownCircle from '../../../assets/svg/Arrow-down-circle';
 import MapPin from '../../../assets/svg/Map-pin';
 import { READ_ONLY_CONTENT_LIST, READ_ONLY_TITLE_LIST, MAP_SHOW_LIST } from '../../../constants/board';
 import MinusCircle from '../../../assets/svg/Minus-circle';
+import { DAO } from '../../../util/data';
 
-const Board = ({ arr, selectedIndex, setSelectedIndex, boardData, handleFormChange, handleSelect }) => {
+const Board = ({
+  arr,
+  latestBoardType,
+  selectedIndex,
+  setSelectedIndex,
+  boardData,
+  handleFormChange,
+  handleSelect,
+}) => {
   const getMatchedSVG = (title, index) => {
     const itemList = arr[index];
 
-    if (MAP_SHOW_LIST.includes(title)) {
+    if (DAO(latestBoardType) !== 'FREE_FORMAT' && MAP_SHOW_LIST.includes(title)) {
       return (
         <Link to="/map">
           <MapPin className="hover:animate-bounce" />
         </Link>
       );
-    } else if (READ_ONLY_CONTENT_LIST.includes(title)) {
+    } else if (DAO(latestBoardType) !== 'FREE_FORMAT' && READ_ONLY_CONTENT_LIST.includes(title)) {
       return <MinusCircle class="cursor-not-allowed" />;
     } else {
       return (
@@ -53,10 +62,10 @@ const Board = ({ arr, selectedIndex, setSelectedIndex, boardData, handleFormChan
           <Input
             className="w-1/4 m-0 text-center"
             name="title"
-            value={title}
+            value={DAO(latestBoardType) === 'FREE_FORMAT' && index === 0 ? '*' + title.replace(/^\*+/g, '') : title}
             index={index}
             onChange={handleFormChange}
-            readOnly={READ_ONLY_TITLE_LIST.includes(title) ? true : false}
+            readOnly={DAO(latestBoardType) !== 'FREE_FORMAT' && READ_ONLY_TITLE_LIST.includes(title) ? true : false}
           />
           <Input
             className="w-3/4"
@@ -64,7 +73,7 @@ const Board = ({ arr, selectedIndex, setSelectedIndex, boardData, handleFormChan
             value={content}
             index={index}
             onChange={handleFormChange}
-            readOnly={READ_ONLY_CONTENT_LIST.includes(title) ? true : false}
+            readOnly={DAO(latestBoardType) !== 'FREE_FORMAT' && READ_ONLY_CONTENT_LIST.includes(title) ? true : false}
           />
           <div id="emo-button">{getMatchedSVG(title, index)}</div>
         </div>

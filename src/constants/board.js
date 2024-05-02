@@ -40,7 +40,7 @@ const BOARD_TYPES = {
     { title: '', content: '' },
   ],
   5: [
-    { title: '자유양식', content: '' },
+    { title: '', content: '' },
     { title: '', content: '' },
     { title: '', content: '' },
     { title: '', content: '' },
@@ -65,7 +65,6 @@ const READ_ONLY_TITLE_LIST = [
   '점검결과',
   '점검위치',
   '점검사항',
-  '자유양식',
 ];
 
 // 위치, 날짜 등 수정해서는 안되는 정보 리스트

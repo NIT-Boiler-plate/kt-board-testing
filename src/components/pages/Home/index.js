@@ -5,7 +5,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { collection, getDocs, query, where, updateDoc, doc } from 'firebase/firestore';
 
 import { authService, dbService } from '../../../firebase';
-import { boardState, userState } from '../../../store/stateAtoms';
+import { userState } from '../../../store/stateAtoms';
 import { onAuthStateChanged } from 'firebase/auth';
 
 import Home from './Home';

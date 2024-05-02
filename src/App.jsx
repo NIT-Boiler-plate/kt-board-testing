@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -53,15 +53,13 @@ const App = () => {
   }, []);
 
   return (
-    <>
-      <div id="home" className="flex flex-col overflow-hidden items-center justify-center bg-gray-100">
-        <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/" element={<Login />} />
-          <Route path="/map" element={<Map />} />
-        </Routes>
-      </div>
-    </>
+    <div id="home" className="flex flex-col overflow-hidden items-center justify-center bg-gray-100">
+      <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/map" element={<Map />} />
+      </Routes>
+    </div>
   );
 };
 
