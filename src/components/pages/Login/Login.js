@@ -72,7 +72,7 @@ export default function Login({ loginForm, handleChange, handleSubmit }) {
                       <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500"></a>
                     </div>
                     <div className="block text-sm font-medium leading-6 text-indigo-600 cursor-pointer">
-                      비밀번호를 잊으셨나요?
+                      {/* 비밀번호를 잊으셨나요? */}
                     </div>
                   </div>
                   <div className="mt-2">

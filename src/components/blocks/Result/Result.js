@@ -19,7 +19,7 @@ const Result = ({ imageRef, boardData, imageUrl, handleDownload }) => {
           </svg>
         </p>
       </div>
-      <div className="relative border-none">
+      <div className="relative border-none w-11/12">
         {combinedUrl && (
           <img
             onClick={handleDownload}
@@ -29,10 +29,10 @@ const Result = ({ imageRef, boardData, imageUrl, handleDownload }) => {
           />
         )}
       </div>
-      <div ref={imageRef} className={`relative border-none`}>
+      <div ref={imageRef} className={`relative border-none w-11/12`}>
         {origianlUrl ? (
           <>
-            <img className="w-full cursor-pointer" src={origianlUrl} alt="선택 이미지" />
+            <img className="cursor-pointer" src={origianlUrl} alt="선택 이미지" />
             <tbody className="absolute left-0 bottom-0 bg-white text-xs">
               {boardData.map((data, index) => {
                 const { title, content } = data;
