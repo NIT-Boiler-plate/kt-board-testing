@@ -19,7 +19,7 @@ const Result = ({ imageRef, boardData, imageUrl, handleDownload }) => {
           </svg>
         </p>
       </div>
-      <div className="relative border-none w-11/12">
+      <div className="relative border-none">
         {combinedUrl && (
           <img
             onClick={handleDownload}
@@ -29,7 +29,7 @@ const Result = ({ imageRef, boardData, imageUrl, handleDownload }) => {
           />
         )}
       </div>
-      <div ref={imageRef} className={`relative border-none w-11/12`}>
+      <div ref={imageRef} className={`relative border-none`}>
         {origianlUrl ? (
           <>
             <img className="cursor-pointer" src={origianlUrl} alt="선택 이미지" />
