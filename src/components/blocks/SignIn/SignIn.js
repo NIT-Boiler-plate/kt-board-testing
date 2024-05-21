@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SignIn = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) => {
+const Modal = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) => {
   return (
     <div>
       <div
@@ -12,7 +12,7 @@ const SignIn = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) =
         <div class=" p-4 w-full max-w-md max-h-full pt-16">
           <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-              <h3 class="text-xl font-semibold text-gray-900 dark:text-white">회원 가입</h3>
+              <h3 class="text-base font-semibold text-gray-900 dark:text-white">회원 가입</h3>
               <button
                 onClick={() => {
                   setModalVisible(!modalVisible);
@@ -43,14 +43,28 @@ const SignIn = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) =
               <form class="space-y-4" action="#">
                 <div>
                   <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    이름
+                    본부
                   </label>
                   <input
-                    type="name"
-                    name="name"
-                    id="name"
+                    type="branchType"
+                    name="branchType"
+                    id="branchType"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="홍길동"
+                    placeholder="서부광역본부"
+                    required
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    센터
+                  </label>
+                  <input
+                    type="centerType"
+                    name="centerType"
+                    id="centerType"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    placeholder="ICT기술담당"
                     required
                     onChange={handleChange}
                   />
@@ -65,6 +79,20 @@ const SignIn = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) =
                     id="team"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="NIT기술팀"
+                    required
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    이름
+                  </label>
+                  <input
+                    type="name"
+                    name="name"
+                    id="name"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    placeholder="김남일"
                     required
                     onChange={handleChange}
                   />
@@ -132,4 +160,4 @@ const SignIn = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) =
   );
 };
 
-export default SignIn;
+export default Modal;

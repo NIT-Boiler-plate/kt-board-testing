@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import SignIn from './SignIn';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { authService, dbService } from '../../../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const Index = ({ modalVisible, setModalVisible }) => {
   const SIGNIN_FORM = {
+    branchType: '',
+    centerType: '',
     name: '',
     team: '',
     email: '',
@@ -25,7 +27,7 @@ const Index = ({ modalVisible, setModalVisible }) => {
   };
 
   const handleSubmit = async () => {
-    const { name, team, email, password, checkedPassword } = signInForm;
+    const { name, team, email, password, checkedPassword, branchType, centerType } = signInForm;
     const emailRegex = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
     if ([name, team, email, password, checkedPassword].includes('')) {
@@ -49,9 +51,19 @@ const Index = ({ modalVisible, setModalVisible }) => {
       return;
     }
 
-    // email 중복체크 기능 넣어주기
-
     try {
+      // 이메일 중복체크
+      const q = query(collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION), where('email', '==', email));
+      const querySnapshot = await getDocs(q);
+      const _userData = querySnapshot.docs.map(doc => ({
+        ...doc.data(), //합쳐서 보여줌
+      }))[0];
+
+      if (_userData) {
+        alert('이미 존재하는 아이디입니다.');
+        return;
+      }
+
       const _userCredential = await createUserWithEmailAndPassword(authService, email, password);
       if (!_userCredential) {
         alert('서비스 에러발생, 다시 실행해주세요.');
@@ -67,8 +79,8 @@ const Index = ({ modalVisible, setModalVisible }) => {
           name: name,
           team: team,
           email: email,
-          branchType: '서부광역본부',
-          centerType: 'ICT기술담당',
+          branchType: branchType,
+          centerType: centerType,
           latestBoardType: 1,
           createAt: new Date(),
           // password: password,
