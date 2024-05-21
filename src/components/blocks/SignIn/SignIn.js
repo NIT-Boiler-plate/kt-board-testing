@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Modal = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) => {
+const SignIn = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) => {
   return (
     <div>
       <div
@@ -123,9 +123,6 @@ const Modal = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) =>
                 >
                   가입 하기
                 </div>
-                <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-                  현재는 테스트 버젼이므로 참고바랍니다.
-                </div>
               </form>
             </div>
           </div>
@@ -135,4 +132,4 @@ const Modal = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) =>
   );
 };
 
-export default Modal;
+export default SignIn;

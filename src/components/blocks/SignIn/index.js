@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import Modal from './Modal';
+import React, { useState } from 'react';
+import SignIn from './SignIn';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { authService, dbService } from '../../../firebase';
@@ -49,10 +49,12 @@ const Index = ({ modalVisible, setModalVisible }) => {
       return;
     }
 
+    // email 중복체크 기능 넣어주기
+
     try {
       const _userCredential = await createUserWithEmailAndPassword(authService, email, password);
       if (!_userCredential) {
-        alert('이미 사용중인 이메일입니다.');
+        alert('서비스 에러발생, 다시 실행해주세요.');
         return;
       }
       const userRef = collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION);
@@ -81,7 +83,7 @@ const Index = ({ modalVisible, setModalVisible }) => {
 
   return (
     <div>
-      <Modal {...{ modalVisible }} {...{ setModalVisible }} {...{ handleChange }} {...{ handleSubmit }} />
+      <SignIn {...{ modalVisible }} {...{ setModalVisible }} {...{ handleChange }} {...{ handleSubmit }} />
     </div>
   );
 };

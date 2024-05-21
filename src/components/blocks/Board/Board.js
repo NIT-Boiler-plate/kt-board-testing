@@ -60,7 +60,7 @@ const Board = ({
       {boardData.map(({ title, content }, index) => (
         <div class="flex justify-center items-center space-x-2 ">
           <Input
-            className="w-1/4 m-0 text-center"
+            className="w-1/4 m-0 text-center text-4xl"
             name="title"
             value={title}
             index={index}

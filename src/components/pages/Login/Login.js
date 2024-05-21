@@ -1,19 +1,28 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import Modal from '../../blocks/Modal';
+import SignIn from '../../blocks/SignIn';
+import PasswordReset from '../../blocks/PasswordReset';
 
-export default function Login({ loginForm, handleChange, handleSubmit }) {
+export default function Login({ handleChange, handleSubmit, handleSendPasswordResetEmail }) {
   const [logoVisible, setLogoVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [passwordResetModalVisible, setPasswordResetModalVisible] = useState(false);
 
   useEffect(() => {
     setLogoVisible(true);
   }, []); // 빈 배열을 전달하여 한 번만 실행되도록 함
 
   return (
-    <div className={`bg-white w-full ${modalVisible ? 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80' : ''}`}>
-      {modalVisible && <Modal {...{ modalVisible }} {...{ setModalVisible }} />}
+    <div
+      className={`bg-white w-full ${
+        modalVisible || passwordResetModalVisible ? 'bg-gray-900 bg-opacity-5 dark:bg-opacity-80' : ''
+      }`}
+    >
+      {modalVisible && <SignIn {...{ modalVisible }} {...{ setModalVisible }} />}
+      {passwordResetModalVisible && (
+        <PasswordReset {...{ passwordResetModalVisible }} {...{ setPasswordResetModalVisible }} />
+      )}
       <div className="relative h-screen isolate px-6 pt-14">
         <div
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -72,7 +81,14 @@ export default function Login({ loginForm, handleChange, handleSubmit }) {
                       <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500"></a>
                     </div>
                     <div className="block text-sm font-medium leading-6 text-indigo-600 cursor-pointer">
-                      {/* 비밀번호를 잊으셨나요? */}
+                      <Link
+                        onClick={() => {
+                          setPasswordResetModalVisible(!passwordResetModalVisible);
+                        }}
+                        className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                      >
+                        비밀번호를 잊으셨나요?
+                      </Link>
                     </div>
                   </div>
                   <div className="mt-2">

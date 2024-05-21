@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+
 import Login from './Login';
-import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { authService } from '../../../firebase';
 import { useNavigate } from 'react-router-dom';
-import { userState } from '../../../store/stateAtoms';
-import { useRecoilState } from 'recoil';
 
 const Index = () => {
   const LOGIN_FORM = {
