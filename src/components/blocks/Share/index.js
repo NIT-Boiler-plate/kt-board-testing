@@ -32,7 +32,7 @@ const Index = ({ imageRef }) => {
   const handleShare = async () => {
     // board를 DB에 넣기 알맞은 형태로 바꿔줘야함.
 
-    // await setDoc(doc(dbService, 'board-collection', dockey), _postData);
+    // await setDoc(doc(dbService, 'REACT_APP_FIREBASE_POST_COLLECTION', dockey), _postData);
 
     if (!navigator.share) {
       alert('공유 기능을 사용할 수 없는 환경입니다.\n*안드로이드는 크롬브라우저, 아이폰은 사파리를 사용해주세요.');
@@ -64,7 +64,7 @@ const Index = ({ imageRef }) => {
 
       const _postData = { ...postForm, postItems: [...boardData] };
       console.log(_postData);
-      const docRef = await addDoc(collection(dbService, 'board-collection'), _postData);
+      const docRef = await addDoc(collection(dbService, process.env.REACT_APP_FIREBASE_POST_COLLECTION), _postData);
 
       alert('공유가 완료됐습니다.');
     } catch (err) {

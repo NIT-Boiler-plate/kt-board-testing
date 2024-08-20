@@ -31,7 +31,7 @@ const Index = () => {
     });
 
     async function querySnapShot(uid) {
-      const q = query(collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION), where('uid', '==', uid));
+      const q = query(collection(dbService, process.env.REACT_APP_FIREBASE_USER_COLLECTION), where('uid', '==', uid));
       const querySnapshot = await getDocs(q);
       const _userData = querySnapshot.docs.map(doc => ({
         ...doc.data(), //합쳐서 보여줌
@@ -45,7 +45,7 @@ const Index = () => {
   // 선택한 드랍다운에서 item의 name과 type을 저장
   // item은 그냥 보여주기만 할거니깐 상관없고, type은 setUserData에 넣어줘야함.
   const handleSelect = async (index = 0, value) => {
-    const collectionRef = doc(dbService, process.env.REACT_APP_FIREBASE_COLLECTION, userData.dockey);
+    const collectionRef = doc(dbService, process.env.REACT_APP_FIREBASE_USER_COLLECTION, userData.dockey);
     await updateDoc(collectionRef, { latestBoardType: value });
 
     setUserData({ ...userData, latestBoardType: value });

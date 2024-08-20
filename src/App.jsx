@@ -24,7 +24,7 @@ const App = () => {
     });
 
     async function querySnapShot(uid) {
-      const q = query(collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION), where('uid', '==', uid));
+      const q = query(collection(dbService, process.env.REACT_APP_FIREBASE_USER_COLLECTION), where('uid', '==', uid));
       const querySnapshot = await getDocs(q);
       const _userData = querySnapshot.docs.map(doc => ({
         ...doc.data(), //합쳐서 보여줌

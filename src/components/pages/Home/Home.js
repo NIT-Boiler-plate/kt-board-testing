@@ -7,14 +7,21 @@ import Photo from '../../blocks/Photo';
 import Share from '../../blocks/Share';
 import Combine from '../../blocks/Combine';
 import Result from '../../blocks/Result';
+import Profile from '../../blocks/Profile';
 
 const Home = ({ BOARD_BUTTON_LIST, seletedBoard, handleLogout, imageRef, handleSelect }) => {
   const [isOpend, setIsOpend] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <div class="flex flex-col h-screen sm:py-6">
-      <div class="bg-white overflow-auto px-3 pt-4 shadow-xl ring-1 ring-gray-900/5 h-screen sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-6">
-        <div class="mx-auto max-w-md">
+    <div className="flex flex-col h-screen sm:py-6">
+      {modalVisible && <Profile {...{ modalVisible }} {...{ setModalVisible }} />}
+      <div
+        className={`${
+          modalVisible ? 'opacity-10' : 'bg-white'
+        } overflow-auto px-3 pt-4 shadow-xl ring-1 ring-gray-900/5 h-screen sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-6`}
+      >
+        <div className="mx-auto max-w-md">
           <div className="flex justify-between items-center pb-1.5 text-black">
             <img className="h-7" src="/images/logo.png" alt="kt logo" />
 
@@ -42,6 +49,14 @@ const Home = ({ BOARD_BUTTON_LIST, seletedBoard, handleLogout, imageRef, handleS
                 </button>
               </div>
               <Dropdown itemList={BOARD_BUTTON_LIST} {...{ isOpend }} {...{ setIsOpend }} {...{ handleSelect }} />
+              <div
+                onClick={() => {
+                  setModalVisible(!modalVisible);
+                }}
+                className="flex font-semibold text-gray-500 cursor-pointer text-sm mr-2 hover:text-black"
+              >
+                프로필
+              </div>
               <div
                 onClick={handleLogout}
                 className="flex font-semibold text-gray-500 cursor-pointer text-sm hover:text-black"

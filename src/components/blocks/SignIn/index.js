@@ -51,9 +51,22 @@ const Index = ({ modalVisible, setModalVisible }) => {
       return;
     }
 
+    if (
+      window.confirm(
+        `입력한 정보가 맞으신가요? 이름과 아이디는 추후 수정이 어렵습니다.\n\n이름: ${name}\n아이디: ${email}`,
+      )
+    ) {
+    } else {
+      console.log('취소');
+      return;
+    }
+
     try {
       // 이메일 중복체크
-      const q = query(collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION), where('email', '==', email));
+      const q = query(
+        collection(dbService, process.env.REACT_APP_FIREBASE_USER_COLLECTION),
+        where('email', '==', email),
+      );
       const querySnapshot = await getDocs(q);
       const _userData = querySnapshot.docs.map(doc => ({
         ...doc.data(), //합쳐서 보여줌
@@ -69,7 +82,7 @@ const Index = ({ modalVisible, setModalVisible }) => {
         alert('서비스 에러발생, 다시 실행해주세요.');
         return;
       }
-      const userRef = collection(dbService, process.env.REACT_APP_FIREBASE_COLLECTION);
+      const userRef = collection(dbService, process.env.REACT_APP_FIREBASE_USER_COLLECTION);
 
       if (_userCredential.user) {
         const _dockey = uuidv4();

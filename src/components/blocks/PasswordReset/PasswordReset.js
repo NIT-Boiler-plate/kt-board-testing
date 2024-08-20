@@ -7,10 +7,10 @@ const PasswordReset = ({ passwordResetModalVisible, setPasswordResetModalVisible
         id="authentication-modal"
         tabindex="-1"
         aria-hidden="true"
-        class="absolute overflow-y-auto overflow-x-hidden flex z-50 p-4  justify-center items-center w-full bg-gray-100 md:inset-0 h-[calc(100%-1rem)] h-screen"
+        class="absolute overflow-y-auto overflow-x-hidden flex z-50 p-4 w-full md:inset-0 h-[calc(100%-1rem)] h-screen"
       >
         <div class="w-full max-w-md max-h-full">
-          <div class=" bg-white rounded-lg shadow dark:bg-gray-700">
+          <div class="bg-white rounded-lg shadow mt-64 dark:bg-gray-700">
             <div class="flex items-center justify-center p-4 md:p-5 border-b rounded-t dark:border-gray-600">
               <h3 class="text-xl font-semibold text-gray-900 dark:text-white">비밀번호 재설정</h3>
               <button
@@ -61,11 +61,11 @@ const PasswordReset = ({ passwordResetModalVisible, setPasswordResetModalVisible
                     handleSubmit();
                   }}
                 >
-                  확인
+                  요청
                 </div>
               </form>
               <div class="text-sm font-medium text-gray-500 mt-2 dark:text-gray-300">
-                비밀번호 수정 메일이 발송 됩니다.
+                비밀번호 재설정 메일이 발송 됩니다. 변경 후 로그인 해주세요.
               </div>
             </div>
           </div>

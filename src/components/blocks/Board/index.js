@@ -65,7 +65,7 @@ const Index = () => {
 
     async function querySnapShot() {
       //최근 보드 5개 이력 불러오기
-      const ref = collection(dbService, 'board-collection');
+      const ref = collection(dbService, process.env.REACT_APP_FIREBASE_POST_COLLECTION);
       const q = query(
         ref,
         where('uid', '==', uid),

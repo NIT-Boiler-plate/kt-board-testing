@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import SignIn from '../../blocks/SignIn';
 import PasswordReset from '../../blocks/PasswordReset';
 
-export default function Login({ handleChange, handleSubmit, handleSendPasswordResetEmail }) {
+export default function Login({ handleChange, handleSubmit }) {
   const [logoVisible, setLogoVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [passwordResetModalVisible, setPasswordResetModalVisible] = useState(false);
@@ -14,16 +14,16 @@ export default function Login({ handleChange, handleSubmit, handleSendPasswordRe
   }, []); // 빈 배열을 전달하여 한 번만 실행되도록 함
 
   return (
-    <div
-      className={`bg-white w-full ${
-        modalVisible || passwordResetModalVisible ? 'bg-gray-900 bg-opacity-5 dark:bg-opacity-80' : ''
-      }`}
-    >
+    <div className={`bg-white w-full`}>
       {modalVisible && <SignIn {...{ modalVisible }} {...{ setModalVisible }} />}
       {passwordResetModalVisible && (
         <PasswordReset {...{ passwordResetModalVisible }} {...{ setPasswordResetModalVisible }} />
       )}
-      <div className="relative h-screen isolate px-6 pt-14">
+      <div
+        className={`relative  h-screen isolate px-6 pt-14 ${
+          modalVisible || passwordResetModalVisible ? 'bg-gray-200 opacity-10 dark:bg-opacity-80' : ''
+        }`}
+      >
         <div
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
           aria-hidden="true"
