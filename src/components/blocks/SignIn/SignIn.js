@@ -50,7 +50,7 @@ const Modal = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) =>
                     name="branchType"
                     id="branchType"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="서부광역본부"
+                    placeholder=""
                     required
                     onChange={handleChange}
                   />
@@ -64,7 +64,7 @@ const Modal = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) =>
                     name="centerType"
                     id="centerType"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="ICT기술담당"
+                    placeholder=""
                     required
                     onChange={handleChange}
                   />
@@ -78,7 +78,7 @@ const Modal = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) =>
                     name="team"
                     id="team"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="NIT기술팀"
+                    placeholder="팀명을 입력해주세요."
                     required
                     onChange={handleChange}
                   />
@@ -92,7 +92,7 @@ const Modal = ({ modalVisible, setModalVisible, handleChange, handleSubmit }) =>
                     name="name"
                     id="name"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="김남일"
+                    placeholder="이름을 입력해주세요."
                     required
                     onChange={handleChange}
                   />
